@@ -1,0 +1,67 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model banks {
+  id             BigInt  @id @default(autoincrement())
+  account_name   String
+  account_number Decimal @db.Decimal
+  works          works[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model healthcheck {
+  id         BigInt    @id @default(autoincrement())
+  name       String?   @db.VarChar
+  count      BigInt?
+  updated_at DateTime? @db.Timestamptz(6)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model places {
+  id         BigInt      @id @default(autoincrement())
+  name       String      @db.VarChar
+  branch     String      @db.VarChar
+  location   String?
+  tag        String?
+  start_time DateTime    @db.Time(6)
+  end_time   DateTime    @db.Time(6)
+  tax_type   String?     @db.VarChar
+  remark     String?
+  schedules  schedules[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model schedules {
+  id                  BigInt   @id @default(autoincrement())
+  created_at          DateTime @default(now()) @db.Timestamptz(6)
+  place_id            BigInt
+  appointment_date    DateTime @db.Date
+  df_guarantee_amount Decimal  @db.Decimal
+  df_percent          Decimal  @db.Decimal
+  remark              String?
+  places              places   @relation(fields: [place_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  works               works[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model works {
+  id                    BigInt    @id @default(autoincrement())
+  created_at            DateTime  @default(now()) @db.Timestamptz(6)
+  schedule_id           BigInt
+  total_amount          Decimal   @db.Decimal
+  df_amount             Decimal   @db.Decimal
+  bank_id               BigInt
+  forecast_payment_date DateTime  @db.Date
+  remark                String?
+  deposit_date          DateTime? @db.Date
+  deposit_amount        Decimal?  @db.Decimal
+  banks                 banks     @relation(fields: [bank_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  schedules             schedules @relation(fields: [schedule_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
