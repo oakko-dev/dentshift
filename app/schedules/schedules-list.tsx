@@ -9,14 +9,14 @@ import { swal } from "@/components/common/sweetalert"
 import { Button } from "@/components/ui/button"
 import { useDeleteSchedule, useInfiniteScheduleLists } from "@/lib/react-query/schedules"
 import { useLoadingStore } from "@/providers/loading-store-provider"
-import { convertDateToThai } from "@/utils/helpers"
+import { convertDateToThai, getPageSize } from "@/utils/helpers"
 
 interface SchedulesListProps {
 	onEdit?: (id: number) => void
 }
 
 export default function SchedulesList({ onEdit }: SchedulesListProps) {
-	const [pageSize] = useState(10)
+	const pageSize = getPageSize()
 	const updateLoading = useLoadingStore(state => state.updateLoading)
 	const [sortBy, setSortBy] = useState<string>("appointment_date")
 	const [sortOrder, setSortOrder] = useState<string>("asc")
