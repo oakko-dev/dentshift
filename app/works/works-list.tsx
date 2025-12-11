@@ -7,20 +7,21 @@ import { toast } from "sonner"
 import Loading from "@/components/common/loading"
 import { swal } from "@/components/common/sweetalert"
 import { Button } from "@/components/ui/button"
-import { useDeleteSchedule, useInfiniteScheduleLists } from "@/lib/react-query/schedules"
+import { useDeleteWork, useInfiniteWorkLists } from "@/lib/react-query/works"
 import { useLoadingStore } from "@/providers/loading-store-provider"
 import { convertDateToThai, getPageSize } from "@/utils/helpers"
 
-interface SchedulesListProps {
+interface WorksListProps {
 	onEdit?: (id: number) => void
+	onDeposit?: (id: number) => void
 }
 
-export default function SchedulesList({ onEdit }: SchedulesListProps) {
+export default function WorksList({ onEdit, onDeposit }: WorksListProps) {
 	const pageSize = getPageSize()
 	const updateLoading = useLoadingStore(state => state.updateLoading)
 	const [sortBy, setSortBy] = useState<string>("appointment_date")
 	const [sortOrder, setSortOrder] = useState<string>("asc")
-	const [showPastAppointments, setShowPastAppointments] = useState<boolean>(false)
+	const [showCompleted, setShowCompleted] = useState<boolean>(true)
 	const observerTarget = useRef<HTMLDivElement>(null)
 
 	const {
@@ -32,16 +33,16 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
-	} = useInfiniteScheduleLists({
+	} = useInfiniteWorkLists({
 		pageSize,
 		sortBy,
 		sortOrder,
 	})
 
-	const deleteScheduleMutation = useDeleteSchedule()
+	const deleteWorkMutation = useDeleteWork()
 
 	// Flatten all pages into a single array
-	const allSchedules = data?.pages.flatMap(page => page.data) ?? []
+	const allWorks = data?.pages.flatMap(page => page.data) ?? []
 
 	// Intersection Observer for infinite scroll
 	useEffect(() => {
@@ -99,10 +100,10 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 
 	const handleDelete = async (id: number, name: string, date: string) => {
 		swal.fire({
-			title: "คุณต้องการลบนัดหมายนี้หรือไม่?",
+			title: "คุณต้องการลบบันทึกการทำงานนี้หรือไม่?",
 			html: `
-                <p>นัดหมาย: ${name}</p>
-                <p>วันที่: ${date}</p>
+                <p>สถานที่: ${name}</p>
+                <p>วันที่คาดการณ์: ${date}</p>
             `,
 			icon: "warning",
 			showCancelButton: true,
@@ -111,10 +112,10 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 		}).then(async (result) => {
 			if (result.isConfirmed) {
 				updateLoading(true)
-				deleteScheduleMutation.mutate(id, {
+				deleteWorkMutation.mutate(id, {
 					onSuccess: () => {
 						updateLoading(false)
-						toast.success("ลบนัดหมายสำเร็จ")
+						toast.success("ลบบันทึกการทำงานสำเร็จ")
 					},
 					onError: (error) => {
 						updateLoading(false)
@@ -137,13 +138,13 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 					<span className="text-muted-foreground text-sm font-medium">เรียงตาม:</span>
 					<div className="flex gap-2">
 						<Button
-							variant={sortBy === "created_at" ? "default" : "outline"}
+							variant={sortBy === "forecast_payment_date" ? "default" : "outline"}
 							size="sm"
-							onClick={() => handleSortChange("created_at")}
+							onClick={() => handleSortChange("forecast_payment_date")}
 							className="gap-1"
 						>
-							วันที่สร้าง
-							{sortBy === "created_at" && (
+							วันที่คาดการณ์
+							{sortBy === "forecast_payment_date" && (
 								<Icon
 									icon={sortOrder === "desc" ? "lucide:arrow-down" : "lucide:arrow-up"}
 									className="size-3"
@@ -156,7 +157,7 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 							onClick={() => handleSortChange("appointment_date")}
 							className="gap-1"
 						>
-							วันที่นัด
+							วันที่ทำงาน
 							{sortBy === "appointment_date" && (
 								<Icon
 									icon={sortOrder === "desc" ? "lucide:arrow-down" : "lucide:arrow-up"}
@@ -168,78 +169,90 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 				</div>
 
 				<Button
-					variant={showPastAppointments ? "outline" : "default"}
+					variant={showCompleted ? "default" : "outline"}
 					size="sm"
-					onClick={() => setShowPastAppointments(prev => !prev)}
+					onClick={() => setShowCompleted(prev => !prev)}
 					className="gap-2"
 				>
 					<Icon
-						icon={showPastAppointments ? "lucide:eye" : "lucide:eye-off"}
+						icon={showCompleted ? "lucide:eye" : "lucide:eye-off"}
 						className="size-4"
 					/>
-					{showPastAppointments ? "ซ่อนนัดที่ผ่านแล้ว" : "แสดงนัดที่ผ่านแล้ว"}
+					{showCompleted ? "ซ่อนที่โอนแล้ว" : "แสดงที่โอนแล้ว"}
 				</Button>
 			</div>
 
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-				{allSchedules
-					.filter((schedule) => {
-						if (showPastAppointments) {
+				{allWorks
+					.filter((work) => {
+						if (!showCompleted) {
 							return true
 						}
-						const appointmentDate = new Date(schedule.appointment_date)
-						const today = new Date()
-						today.setHours(0, 0, 0, 0)
-						appointmentDate.setHours(0, 0, 0, 0)
-						return appointmentDate >= today
+						return !work.deposit_date
 					})
-					.map((schedule) => {
-						const appointmentDate = new Date(schedule.appointment_date)
+					.map((work) => {
+						const isCompleted = !!work.deposit_date
+						const forecastDate = new Date(work.forecast_payment_date)
 						const today = new Date()
 						today.setHours(0, 0, 0, 0)
-						appointmentDate.setHours(0, 0, 0, 0)
-						const isPastDate = appointmentDate < today
+						forecastDate.setHours(0, 0, 0, 0)
+						const isOverdue = forecastDate < today && !isCompleted
 
 						return (
 							<div
-								key={schedule.id}
+								key={work.id}
 								className={`bg-card relative rounded-xl border p-4 shadow-sm transition-all hover:shadow-md ${
-									isPastDate ? "opacity-50 grayscale" : ""
-								}`}
+									isCompleted ? "opacity-60 grayscale" : ""
+								} ${isOverdue ? "border-destructive" : ""}`}
 							>
-								{/* Past date indicator */}
-								{isPastDate && (
+								{/* Status indicator */}
+								{isCompleted && (
+									<div className="absolute top-2 right-2 rounded-md bg-green-500/90 px-2 py-1 text-xs font-medium text-white">
+										โอนแล้ว
+									</div>
+								)}
+								{isOverdue && (
 									<div className="bg-destructive/90 absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-medium text-white">
-										ผ่านมาแล้ว
+										เกินกำหนด
 									</div>
 								)}
 
-								{/* Header with date and actions */}
+								{/* Header with schedule info and actions */}
 								<div className="mb-3 flex items-start justify-between">
 									<div>
-										<div className={`mb-1 flex items-center gap-1 text-sm font-medium ${isPastDate ? "text-muted-foreground" : "text-primary"}`}>
+										<div className={`mb-1 flex items-center gap-1 text-sm font-medium ${isOverdue ? "text-destructive" : isCompleted ? "text-muted-foreground" : "text-primary"}`}>
 											<Icon icon="lucide:calendar" className="size-4" />
-											{convertDateToThai(schedule.appointment_date, "dd MMMM yyyy")}
+											{convertDateToThai(work.schedule_appointment_date!, "dd MMMM yyyy")}
 										</div>
 										<div className="text-muted-foreground flex items-center gap-1 text-sm">
 											<Icon icon="lucide:map-pin" className="size-3" />
-											<span className="text-foreground font-medium">{schedule.place_name || "ไม่ระบุสถานที่"}</span>
+											<span className="text-foreground font-medium">{work.schedule_place_name || "ไม่ระบุสถานที่"}</span>
 										</div>
-										{schedule.place_branch && (
+										{work.schedule_place_branch && (
 											<div className="flex items-center gap-1">
 												<Icon icon="lucide:map-pin" className="invisible size-3" />
 												<span className="text-muted-foreground flex items-center gap-1 text-sm">
-													{schedule.place_branch}
+													{work.schedule_place_branch}
 												</span>
 											</div>
 										)}
 									</div>
-									<div className="flex gap-2">
+									<div className="flex gap-1">
+										<Button
+											variant="ghost"
+											size="icon"
+											className="text-green-600 hover:bg-green-50 hover:text-green-700"
+											onClick={() => onDeposit?.(work.id)}
+											title="บันทึกการโอนเงิน"
+										>
+											<Icon icon="lucide:banknote" className="size-4" />
+										</Button>
 										<Button
 											variant="ghost"
 											size="icon"
 											className="text-primary"
-											onClick={() => onEdit?.(schedule.id)}
+											onClick={() => onEdit?.(work.id)}
+											title="แก้ไข"
 										>
 											<Icon icon="lucide:pencil" className="size-4" />
 										</Button>
@@ -247,39 +260,79 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 											variant="ghost"
 											size="icon"
 											className="text-destructive"
-											onClick={() => handleDelete(schedule.id, `${schedule.place_name} - ${schedule.place_branch}`, convertDateToThai(schedule.appointment_date, "d MMMM yyyy"))}
+											onClick={() => handleDelete(work.id, `${work.schedule_place_name} - ${work.schedule_place_branch}`, convertDateToThai(work.forecast_payment_date, "d MMMM yyyy"))}
+											title="ลบ"
 										>
 											<Icon icon="lucide:trash-2" className="size-4" />
 										</Button>
 									</div>
 								</div>
 
-								{/* DF Information */}
+								{/* Amount Information */}
 								<div className="mb-3 space-y-2">
 									<div className="bg-muted/50 rounded-lg p-3">
 										<div className="mb-2 flex items-center justify-between">
-											<span className="text-muted-foreground text-sm">DF Guarantee</span>
+											<span className="text-muted-foreground text-sm">ยอดรวมทั้งหมด</span>
 											<span className="text-foreground text-lg font-semibold">
-												{schedule.df_guarantee_amount.toLocaleString()}
+												{work.total_amount.toLocaleString()}
 												{" "}
 												บาท
 											</span>
 										</div>
 										<div className="flex items-center justify-between">
-											<span className="text-muted-foreground text-sm">DF Percent</span>
+											<span className="text-muted-foreground text-sm">ยอด DF ทั้งหมด</span>
 											<span className="text-primary text-lg font-semibold">
-												{schedule.df_percent}
-												%
+												{work.df_amount.toLocaleString()}
+												{" "}
+												บาท
 											</span>
 										</div>
 									</div>
 								</div>
 
+								{/* Payment Information */}
+								<div className="mb-3 space-y-2">
+									<div className="flex items-center justify-between">
+										<span className="text-muted-foreground text-sm">วันที่คาดการณ์:</span>
+										<span className={`font-medium ${isOverdue ? "text-destructive" : "text-foreground"}`}>
+											{convertDateToThai(work.forecast_payment_date, "d MMM yyyy")}
+										</span>
+									</div>
+									{work.deposit_date && (
+										<>
+											<div className="flex items-center justify-between">
+												<span className="text-muted-foreground text-sm">วันที่โอน:</span>
+												<span className="font-medium text-green-600">
+													{convertDateToThai(work.deposit_date, "d MMM yyyy")}
+												</span>
+											</div>
+											<div className="flex items-center justify-between">
+												<span className="text-muted-foreground text-sm">ยอดที่โอน:</span>
+												<span className="font-semibold text-green-600">
+													{work.deposit_amount?.toLocaleString()}
+													{" "}
+													บาท
+												</span>
+											</div>
+										</>
+									)}
+								</div>
+
+								{/* Bank Information */}
+								<div className="bg-muted/30 mb-3 rounded-lg p-2">
+									<div className="text-muted-foreground flex items-center gap-2 text-xs">
+										<Icon icon="lucide:building-2" className="size-3" />
+										<span className="font-medium">{work.bank_account_name}</span>
+										-
+										<span>{work.bank_account_number}</span>
+									</div>
+								</div>
+
 								{/* Remark */}
-								{schedule.remark && (
+								{work.remark && (
 									<div className="text-muted-foreground mb-3 text-sm">
 										<div className="mb-1 font-medium">หมายเหตุ:</div>
-										<div className="text-foreground">{schedule.remark}</div>
+										<div className="text-foreground">{work.remark}</div>
 									</div>
 								)}
 
@@ -287,7 +340,7 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 								<div className="text-muted-foreground border-t pt-3 text-xs">
 									สร้างเมื่อ:
 									{" "}
-									{convertDateToThai(schedule.created_at, "dd MMM yyyy HH:mm")}
+									{convertDateToThai(work.created_at, "dd MMM yyyy HH:mm")}
 								</div>
 							</div>
 						)
@@ -301,7 +354,7 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 						<Loading />
 					</div>
 				)}
-				{!hasNextPage && allSchedules.length > 0 && (
+				{!hasNextPage && allWorks.length > 0 && (
 					<div className="text-muted-foreground text-sm">
 						แสดงครบทั้งหมดแล้ว
 					</div>

@@ -172,3 +172,22 @@ export function useDeleteSchedule() {
 		},
 	})
 }
+
+export function useScheduleMasterLists(excludeScheduleId?: number) {
+	return useQuery({
+		queryKey: ["scheduleMasterListQuery", excludeScheduleId],
+		queryFn: async () => {
+			const queryParams = new URLSearchParams()
+			if (excludeScheduleId) {
+				queryParams.append("excludeScheduleId", excludeScheduleId.toString())
+			}
+			
+			const url = `/api/schedules/master${queryParams.toString() ? `?${queryParams.toString()}` : ""}`
+			const response = await fetch(url)
+			if (!response.ok) {
+				throw new Error("Failed to fetch schedule master list")
+			}
+			return response.json()
+		},
+	})
+}

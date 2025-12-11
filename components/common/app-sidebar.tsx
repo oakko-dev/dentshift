@@ -23,7 +23,6 @@ export function AppSidebar() {
 		banks: false,
 		schedules: false,
 		works: false,
-		payments: false,
 	})
 
 	const checkIfMenuActive = useCallback(
@@ -67,8 +66,6 @@ export function AppSidebar() {
 				checkIfMenuActive("/schedules"),
 			works:
 				checkIfMenuActive("/works"),
-			payments:
-				checkIfMenuActive("/payments"),
 		})
 	}, [pathname, checkIfMenuActive])
 
