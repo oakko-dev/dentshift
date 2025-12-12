@@ -7,7 +7,13 @@ export interface DashboardStats {
 	placeCount: number
 }
 
-export function useDashboardStats(params: { year: number; month: number }) {
+export interface ChartDataPoint {
+	month: string
+	income: number
+	expense: number
+}
+
+export function useDashboardStats(params: { year: number, month: number }) {
 	return useQuery<DashboardStats, Error>({
 		queryKey: ["dashboardStats", params.year, params.month],
 		queryFn: async () => {
@@ -27,3 +33,18 @@ export function useDashboardStats(params: { year: number; month: number }) {
 	})
 }
 
+export function useDashboardChartData() {
+	return useQuery<ChartDataPoint[], Error>({
+		queryKey: ["dashboardChartData"],
+		queryFn: async () => {
+			const response = await fetch("/api/dashboards/chart")
+
+			if (!response.ok) {
+				throw new Error("Failed to fetch chart data")
+			}
+
+			return response.json()
+		},
+		staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
+	})
+}

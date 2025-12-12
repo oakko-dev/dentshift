@@ -5,11 +5,42 @@ import { endOfMonth, format, getDay, startOfMonth } from "date-fns"
 import { th } from "date-fns/locale"
 import { uniqueId } from "lodash"
 import { useMemo, useState } from "react"
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { Combobox } from "@/components/common/combobox"
 import ErrorComponent from "@/components/common/error"
-import { useDashboardStats } from "@/lib/react-query/dashboards"
+import { useDashboardChartData, useDashboardStats } from "@/lib/react-query/dashboards"
 import { useScheduleLists } from "@/lib/react-query/schedules"
 import { MasterSelectProps } from "@/types/global"
+
+// Custom Tooltip Component
+function CustomTooltip({ active, payload }: any) {
+	if (active && payload && payload.length) {
+		return (
+			<div className="bg-card rounded-lg border p-3 shadow-lg">
+				<p className="text-foreground mb-2 text-sm font-semibold">{payload[0].payload.month}</p>
+				<div className="space-y-1">
+					<div className="flex items-center justify-between gap-4">
+						<span className="text-xs text-[#f59e0b]">คาดการณ์ :</span>
+						<span className="text-foreground text-xs font-semibold">
+							{payload[0].payload.expense.toLocaleString()}
+							{" "}
+							บาท
+						</span>
+					</div>
+					<div className="flex items-center justify-between gap-4">
+						<span className="text-xs text-[#10b981]">รับแล้ว :</span>
+						<span className="text-foreground text-xs font-semibold">
+							{payload[0].payload.income.toLocaleString()}
+							{" "}
+							บาท
+						</span>
+					</div>
+				</div>
+			</div>
+		)
+	}
+	return null
+}
 
 // Separate component for stats cards to optimize re-rendering
 function StatsCards({ year, month }: { year: number, month: number }) {
@@ -229,6 +260,9 @@ export default function Home() {
 		setCalendarMonth(new Date())
 	}
 
+	// Fetch chart data from API
+	const { data: chartData, isLoading: isLoadingChartData } = useDashboardChartData()
+
 	return (
 		<div className="space-y-6">
 			{/* Sorting and Filter Bar */}
@@ -385,7 +419,7 @@ export default function Home() {
 								: todayWork
 									? (
 											<>
-												<p className="text-foreground text-3xl font-bold">{todayWork.place_name}</p>
+												<p className="text-foreground text-2xl font-bold">{todayWork.place_name}</p>
 												{todayWork.place_branch && (
 													<p className="text-foreground/80 text-lg">{todayWork.place_branch}</p>
 												)}
@@ -444,7 +478,7 @@ export default function Home() {
 								: upcomingWork
 									? (
 											<>
-												<p className="text-foreground text-3xl font-bold">{upcomingWork.place_name}</p>
+												<p className="text-foreground text-2xl font-bold">{upcomingWork.place_name}</p>
 												{upcomingWork.place_branch && (
 													<p className="text-foreground/80 text-lg">{upcomingWork.place_branch}</p>
 												)}
@@ -485,6 +519,81 @@ export default function Home() {
 											</div>
 										)}
 						</div>
+					</div>
+				</div>
+
+				<div className="col-span-12">
+					<div className="bg-card rounded-lg border p-6">
+						<div className="mb-6">
+							<h2 className="text-foreground text-lg font-semibold">ภาพรวมรายรับ</h2>
+							<p className="text-foreground/60 text-sm">รายรับที่ได้รับจริงและคาดการณ์ 6 เดือนย้อนหลัง</p>
+						</div>
+						{isLoadingChartData
+							? (
+									<div className="flex h-[350px] items-center justify-center">
+										<div className="flex flex-col items-center gap-3">
+											<div className="border-t-primary h-12 w-12 animate-spin rounded-full border-4 border-gray-200"></div>
+											<p className="text-foreground/60 text-sm">กำลังโหลดข้อมูล...</p>
+										</div>
+									</div>
+								)
+							: chartData && chartData.length > 0
+								? (
+										<>
+											<ResponsiveContainer width="100%" height={350}>
+												<BarChart
+													data={chartData}
+													margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+												>
+													<CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+													<XAxis
+														dataKey="month"
+														axisLine={false}
+														tickLine={false}
+														tick={{ fill: "#6b7280", fontSize: 12 }}
+													/>
+													<YAxis
+														axisLine={false}
+														tickLine={false}
+														tick={{ fill: "#6b7280", fontSize: 12 }}
+														tickFormatter={value => `${(value / 1000).toFixed(0)}K`}
+													/>
+													<Tooltip
+														content={<CustomTooltip />}
+														cursor={{ fill: "rgba(0, 0, 0, 0.05)" }}
+													/>
+													<Bar
+														dataKey="expense"
+														fill="#f59e0b"
+														radius={[8, 8, 0, 0]}
+														maxBarSize={100}
+													/>
+													<Bar
+														dataKey="income"
+														fill="#10b981"
+														radius={[8, 8, 0, 0]}
+														maxBarSize={100}
+													/>
+												</BarChart>
+											</ResponsiveContainer>
+											<div className="mt-6 flex items-center justify-center gap-6">
+												<div className="flex items-center gap-2">
+													<div className="h-3 w-3 rounded-full bg-[#f59e0b]"></div>
+													<span className="text-foreground/80 text-sm">คาดการณ์</span>
+												</div>
+												<div className="flex items-center gap-2">
+													<div className="h-3 w-3 rounded-full bg-[#10b981]"></div>
+													<span className="text-foreground/80 text-sm">รับแล้ว</span>
+												</div>
+											</div>
+										</>
+									)
+								: (
+										<div className="flex h-[350px] flex-col items-center justify-center">
+											<Icon icon="lucide:bar-chart-2" className="text-foreground/20 mb-3 h-16 w-16" />
+											<p className="text-foreground/60">ไม่มีข้อมูลสำหรับแสดงกราฟ</p>
+										</div>
+									)}
 					</div>
 				</div>
 			</div>
