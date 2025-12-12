@@ -25,16 +25,19 @@ export async function GET(request: NextRequest) {
 			const startDate = new Date(year, monthIndex, 1)
 			const endDate = new Date(year, monthIndex + 1, 1)
 
+			console.log(date)
+
 			// Query works for this month
 			// Income: sum of deposit_amount where deposit_date is not null
 			// Expense: sum of df_amount (down payment/fee)
 			const [incomeData, expenseData] = await Promise.all([
 				prisma.works.aggregate({
 					where: {
-						deposit_date: {
-							gte: startDate,
-							lt: endDate,
-							not: null,
+						schedules: {
+							appointment_date: {
+								gte: startDate,
+								lt: endDate,
+							},
 						},
 					},
 					_sum: {

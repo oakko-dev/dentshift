@@ -54,7 +54,7 @@ export async function PUT(
 			data: {
 				account_name,
 				account_number: sanitizedAccountNumber,
-			},  
+			},
 		})
 
 		return NextResponse.json({
