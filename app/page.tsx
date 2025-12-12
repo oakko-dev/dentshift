@@ -141,7 +141,7 @@ export default function Home() {
 	}
 
 	// Fetch schedules for the calendar month
-	const { data: schedulesData } = useScheduleLists({
+	const { data: schedulesData, isLoading: isLoadingSchedules } = useScheduleLists({
 		page: 0,
 		pageSize: 100, // Get enough to cover the month
 	})
@@ -260,7 +260,7 @@ export default function Home() {
 			{/* Stats Grid - Only this component will re-render when month/year changes */}
 			<StatsCards year={selectedYear} month={selectedMonth} />
 
-			<div className="flex grid-cols-12 flex-col gap-4 lg:grid">
+			<div className="flex flex-col gap-4 lg:grid lg:grid-cols-12">
 				{/* Calendar Section */}
 				<div className="bg-card col-span-8 rounded-lg border p-6">
 					<div className="mb-4 flex flex-wrap items-center justify-between gap-4">
@@ -268,7 +268,7 @@ export default function Home() {
 							<h2 className="text-foreground text-lg font-semibold">ปฏิทินนัดหมาย</h2>
 							<p className="text-foreground/60 text-sm">จัดการตารางนัดของคุณ</p>
 						</div>
-						<div className="mb-4 flex flex-wrap items-center justify-between gap-8 sm:justify-start">
+						<div className="flex flex-wrap items-center justify-start gap-4 sm:gap-8">
 							<button
 								type="button"
 								onClick={handleToday}
@@ -310,42 +310,59 @@ export default function Home() {
 					</div>
 
 					{/* Calendar grid */}
-					<div className="grid grid-cols-7 gap-2">
-						{calendarDays.map((date, index) => {
-							if (!date) {
-								return <div key={`empty-${calendarMonth.getMonth()}-${uniqueId()}`} className="min-h-[80px]" />
-							}
-
-							const dateKey = format(date, "yyyy-MM-dd")
-							const schedule = scheduleDateMap.get(dateKey)
-							const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
-							const isPastMonth = date.getMonth() !== calendarMonth.getMonth()
-
-							return (
-								<div
-									key={uniqueId()}
-									className={`
-									relative flex min-h-[80px] flex-col items-start justify-start rounded-lg border p-2 transition-colors
-									${isToday ? "bg-primary hover:bg-primary-dark border-0! text-white" : "hover:bg-accent bg-white"}
-									${schedule ? "border-primary/50 border" : "border-gray-200"}
-									${isPastMonth ? "opacity-50" : ""}
-								`}
-								>
-									<span className={`text-sm font-medium ${isToday ? "text-white" : "text-foreground"}`}>
-										{format(date, "d")}
-									</span>
-									{schedule && (
-										<span className={`mt-1 line-clamp-2 w-full text-[10px] ${isToday ? "text-white/90" : "text-primary"}`}>
-											{schedule.place_name}
-											{" "}
-											{schedule.place_branch ? ` - ${schedule.place_branch}` : ""}
-										</span>
-									)}
+					{isLoadingSchedules
+						? (
+								<div className="grid grid-cols-7 gap-2">
+									{Array.from({ length: 35 }).map((_, idx) => (
+										<div
+											key={`skeleton-${calendarMonth.getMonth()}-${idx}`}
+											className="flex min-h-[80px] animate-pulse flex-col rounded-lg border border-gray-200 bg-gray-100 p-2"
+										>
+											<div className="mb-2 h-4 w-6 rounded bg-gray-200"></div>
+											<div className="h-3 w-full rounded bg-gray-200"></div>
+										</div>
+									))}
 								</div>
 							)
-						})}
-					</div>
+						: (
+								<div className="grid grid-cols-7 gap-2">
+									{calendarDays.map((date, index) => {
+										if (!date) {
+											return <div key={`empty-${calendarMonth.getMonth()}-${uniqueId()}`} className="min-h-[80px]" />
+										}
+
+										const dateKey = format(date, "yyyy-MM-dd")
+										const schedule = scheduleDateMap.get(dateKey)
+										const isToday = format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd")
+										const isPastMonth = date.getMonth() !== calendarMonth.getMonth()
+
+										return (
+											<div
+												key={uniqueId()}
+												className={`
+											relative flex min-h-[80px] flex-col items-start justify-start rounded-lg border p-2 transition-colors
+											${isToday ? "bg-primary hover:bg-primary-dark border-0 text-white" : "hover:bg-accent bg-white"}
+											${schedule ? "border-primary/50 border" : "border-gray-200"}
+											${isPastMonth ? "opacity-50" : ""}
+										`}
+											>
+												<span className={`text-sm font-medium ${isToday ? "text-white" : "text-foreground"}`}>
+													{format(date, "d")}
+												</span>
+												{schedule && (
+													<span className={`mt-1 line-clamp-2 w-full text-[10px] ${isToday ? "text-white/90" : "text-primary"}`}>
+														{schedule.place_name}
+														{" "}
+														{schedule.place_branch ? ` - ${schedule.place_branch}` : ""}
+													</span>
+												)}
+											</div>
+										)
+									})}
+								</div>
+							)}
 				</div>
+
 				<div className="col-span-4 flex flex-col gap-4">
 					{/* Today's Work */}
 					<div className="bg-card rounded-lg border p-6">
@@ -354,37 +371,54 @@ export default function Home() {
 								<Icon icon="lucide:calendar-check" className="text-primary h-5 w-5" />
 								<h3 className="text-foreground text-lg font-semibold">งานวันนี้</h3>
 							</div>
-							{todayWork
+							{isLoadingSchedules
 								? (
-										<>
-											<p className="text-foreground text-3xl font-bold">{todayWork.place_name}</p>
-											{todayWork.place_branch && (
-												<p className="text-foreground/80 text-lg">{todayWork.place_branch}</p>
-											)}
-											<div className="bg-primary/5 mt-4 flex flex-col gap-2 rounded-lg p-3">
-												<div className="flex items-center justify-between text-sm">
-													<span className="text-foreground/60">ค่ามัดจำ:</span>
-													<span className="text-foreground font-semibold">
-														฿
-														{todayWork.df_guarantee_amount.toLocaleString()}
-													</span>
-												</div>
-												<div className="flex items-center justify-between text-sm">
-													<span className="text-foreground/60">เปอร์เซ็นต์:</span>
-													<span className="text-foreground font-semibold">
-														{todayWork.df_percent}
-														%
-													</span>
-												</div>
+										<div className="animate-pulse space-y-4">
+											<div className="h-9 w-3/4 rounded bg-gray-200"></div>
+											<div className="h-6 w-1/2 rounded bg-gray-200"></div>
+											<div className="space-y-2 rounded-lg bg-gray-100 p-3">
+												<div className="h-4 w-full rounded bg-gray-200"></div>
+												<div className="h-4 w-full rounded bg-gray-200"></div>
 											</div>
-										</>
-									)
-								: (
-										<div className="flex flex-col items-center justify-center py-8">
-											<Icon icon="lucide:calendar-x" className="text-foreground/20 mb-2 h-12 w-12" />
-											<p className="text-foreground/60">ไม่มีงานวันนี้</p>
 										</div>
-									)}
+									)
+								: todayWork
+									? (
+											<>
+												<p className="text-foreground text-3xl font-bold">{todayWork.place_name}</p>
+												{todayWork.place_branch && (
+													<p className="text-foreground/80 text-lg">{todayWork.place_branch}</p>
+												)}
+												<div className="bg-primary/5 mt-4 flex flex-col gap-2 rounded-lg p-3">
+													<div className="flex items-center justify-between text-sm">
+														<span className="text-foreground/60">ค่ามัดจำ:</span>
+														<span className="text-foreground font-semibold">
+															฿
+															{todayWork.df_guarantee_amount.toLocaleString()}
+														</span>
+													</div>
+													<div className="flex items-center justify-between text-sm">
+														<span className="text-foreground/60">เปอร์เซ็นต์:</span>
+														<span className="text-foreground font-semibold">
+															{todayWork.df_percent}
+															%
+														</span>
+													</div>
+												</div>
+												{todayWork.remark && (
+													<div className="mt-3">
+														<p className="text-foreground/60 text-sm">หมายเหตุ:</p>
+														<p className="text-foreground text-sm">{todayWork.remark}</p>
+													</div>
+												)}
+											</>
+										)
+									: (
+											<div className="flex flex-col items-center justify-center py-8">
+												<Icon icon="lucide:calendar-x" className="text-foreground/20 mb-2 h-12 w-12" />
+												<p className="text-foreground/60">ไม่มีงานวันนี้</p>
+											</div>
+										)}
 						</div>
 					</div>
 
@@ -395,48 +429,65 @@ export default function Home() {
 								<Icon icon="lucide:calendar-clock" className="text-warning h-5 w-5" />
 								<h3 className="text-foreground text-lg font-semibold">งานที่จะมาถึง</h3>
 							</div>
-							{upcomingWork
+							{isLoadingSchedules
 								? (
-										<>
-											<p className="text-foreground text-3xl font-bold">{upcomingWork.place_name}</p>
-											{upcomingWork.place_branch && (
-												<p className="text-foreground/80 text-lg">{upcomingWork.place_branch}</p>
-											)}
-											<div className="mt-3 flex items-center gap-2">
-												<Icon icon="lucide:calendar" className="text-foreground/60 h-4 w-4" />
-												<p className="text-foreground text-sm font-medium">
-													{format(new Date(upcomingWork.appointment_date), "d MMMM yyyy", { locale: th }).replace(/\d{4}/, year => (Number.parseInt(year) + 543).toString())}
-												</p>
+										<div className="animate-pulse space-y-4">
+											<div className="h-9 w-3/4 rounded bg-gray-200"></div>
+											<div className="h-6 w-1/2 rounded bg-gray-200"></div>
+											<div className="h-5 w-2/3 rounded bg-gray-200"></div>
+											<div className="space-y-2 rounded-lg bg-gray-100 p-3">
+												<div className="h-4 w-full rounded bg-gray-200"></div>
+												<div className="h-4 w-full rounded bg-gray-200"></div>
 											</div>
-											<div className="bg-warning/5 mt-4 flex flex-col gap-2 rounded-lg p-3">
-												<div className="flex items-center justify-between text-sm">
-													<span className="text-foreground/60">ค่ามัดจำ:</span>
-													<span className="text-foreground font-semibold">
-														฿
-														{upcomingWork.df_guarantee_amount.toLocaleString()}
-													</span>
-												</div>
-												<div className="flex items-center justify-between text-sm">
-													<span className="text-foreground/60">เปอร์เซ็นต์:</span>
-													<span className="text-foreground font-semibold">
-														{upcomingWork.df_percent}
-														%
-													</span>
-												</div>
-											</div>
-										</>
-									)
-								: (
-										<div className="flex flex-col items-center justify-center py-8">
-											<Icon icon="lucide:calendar-x" className="text-foreground/20 mb-2 h-12 w-12" />
-											<p className="text-foreground/60">ไม่มีงานที่จะมาถึง</p>
 										</div>
-									)}
+									)
+								: upcomingWork
+									? (
+											<>
+												<p className="text-foreground text-3xl font-bold">{upcomingWork.place_name}</p>
+												{upcomingWork.place_branch && (
+													<p className="text-foreground/80 text-lg">{upcomingWork.place_branch}</p>
+												)}
+												<div className="mt-3 flex items-center gap-2">
+													<Icon icon="lucide:calendar" className="text-foreground/60 h-4 w-4" />
+													<p className="text-foreground text-sm font-medium">
+														{format(new Date(upcomingWork.appointment_date), "d MMMM yyyy", { locale: th }).replace(/\d{4}/, year => (Number.parseInt(year) + 543).toString())}
+													</p>
+												</div>
+												<div className="bg-warning/5 mt-4 flex flex-col gap-2 rounded-lg p-3">
+													<div className="flex items-center justify-between text-sm">
+														<span className="text-foreground/60">ค่ามัดจำ:</span>
+														<span className="text-foreground font-semibold">
+															฿
+															{upcomingWork.df_guarantee_amount.toLocaleString()}
+														</span>
+													</div>
+													<div className="flex items-center justify-between text-sm">
+														<span className="text-foreground/60">เปอร์เซ็นต์:</span>
+														<span className="text-foreground font-semibold">
+															{upcomingWork.df_percent}
+															%
+														</span>
+													</div>
+												</div>
+												{upcomingWork.remark && (
+													<div className="mt-3">
+														<p className="text-foreground/60 text-sm">หมายเหตุ:</p>
+														<p className="text-foreground text-sm">{upcomingWork.remark}</p>
+													</div>
+												)}
+											</>
+										)
+									: (
+											<div className="flex flex-col items-center justify-center py-8">
+												<Icon icon="lucide:calendar-x" className="text-foreground/20 mb-2 h-12 w-12" />
+												<p className="text-foreground/60">ไม่มีงานที่จะมาถึง</p>
+											</div>
+										)}
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	)
 }
