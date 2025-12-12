@@ -8,13 +8,13 @@ export async function GET(request: NextRequest) {
 		const yearParam = searchParams.get("year")
 		const monthParam = searchParams.get("month")
 
-		// Default to current year and month if not provided
-		const year = yearParam ? Number.parseInt(yearParam) : new Date().getFullYear()
-		const month = monthParam ? Number.parseInt(monthParam) : new Date().getMonth()
+	// Default to current year and month if not provided
+	const year = yearParam ? Number.parseInt(yearParam) : new Date().getFullYear()
+	const month = monthParam ? Number.parseInt(monthParam) : new Date().getMonth()
 
-		// Create start and end dates for the selected month
-		const startDate = new Date(year, month, 1)
-		const endDate = new Date(year, month + 1, 1)
+	// Create start and end dates for the selected month in UTC
+	const startDate = new Date(Date.UTC(year, month, 1))
+	const endDate = new Date(Date.UTC(year, month + 1, 1))
 
 		// Query all schedules in the selected month
 		// Query sum all df_guarantee_amount for the month

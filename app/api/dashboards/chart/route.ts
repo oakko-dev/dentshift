@@ -21,11 +21,9 @@ export async function GET(request: NextRequest) {
 			const monthIndex = date.getMonth()
 			const year = date.getFullYear()
 
-			// Get start and end of month
-			const startDate = new Date(year, monthIndex, 1)
-			const endDate = new Date(year, monthIndex + 1, 1)
-
-			console.log(date)
+			// Get start and end of month in UTC
+			const startDate = new Date(Date.UTC(year, monthIndex, 1))
+			const endDate = new Date(Date.UTC(year, monthIndex + 1, 1))
 
 			// Query works for this month
 			// Income: sum of deposit_amount where deposit_date is not null
