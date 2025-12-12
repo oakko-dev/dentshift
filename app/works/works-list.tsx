@@ -20,7 +20,7 @@ export default function WorksList({ onEdit, onDeposit }: WorksListProps) {
 	const pageSize = getPageSize()
 	const updateLoading = useLoadingStore(state => state.updateLoading)
 	const [sortBy, setSortBy] = useState<string>("appointment_date")
-	const [sortOrder, setSortOrder] = useState<string>("asc")
+	const [sortOrder, setSortOrder] = useState<string>("desc")
 	const [showCompleted, setShowCompleted] = useState<boolean>(true)
 	const observerTarget = useRef<HTMLDivElement>(null)
 
@@ -94,7 +94,7 @@ export default function WorksList({ onEdit, onDeposit }: WorksListProps) {
 		else {
 			// Set new field with default desc order
 			setSortBy(field)
-			setSortOrder("desc")
+			setSortOrder("asc")
 		}
 	}
 
