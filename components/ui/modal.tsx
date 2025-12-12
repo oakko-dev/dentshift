@@ -77,7 +77,7 @@ export default function Modal({ open, header, children, size = "md", multiple = 
 										: size == "lg"
 											? "max-w-6xl"
 											: "max-w-[1440px]",
-								"data-[state=open]:animate-contentShow fixed top-0 left-[50%] h-full w-full translate-x-[-50%] rounded-[20px] bg-white pb-6 focus:outline-none md:top-[50%] md:h-auto md:translate-y-[-50%]",
+								"data-[state=open]:animate-contentShow fixed top-0 left-[50%] h-full w-full translate-x-[-50%] sm:rounded-[20px] bg-white pb-6 focus:outline-none md:top-[50%] md:h-auto md:translate-y-[-50%]",
 							)}
 						>
 							<motion.div
