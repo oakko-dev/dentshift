@@ -56,7 +56,7 @@ export default function Layouts({ children }: LayoutsProps) {
 							<SidebarInset>
 								<Toaster />
 								<Suspense fallback={<Loading fullscreen />}>
-									<main className="w-full pt-[64px]">
+									<main className="w-full pt-[80px]">
 										<div className="bg-sub-background px-4 py-4">
 											{children}
 											{setLoadingPortal()}

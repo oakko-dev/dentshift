@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 		const sortOrder = searchParams.get("sortOrder") || "desc"
 
 		// Validate sortBy to prevent SQL injection
-		const allowedSortFields = ["created_at", "forecast_payment_date", "deposit_date"]
+		const allowedSortFields = ["created_at", "forecast_payment_date", "deposit_date", "appointment_date"]
 		const validSortBy = allowedSortFields.includes(sortBy) ? sortBy : "created_at"
 		const validSortOrder = sortOrder === "asc" ? "asc" : "desc"
 
@@ -20,9 +20,15 @@ export async function GET(request: NextRequest) {
 			prisma.works.findMany({
 				skip: page * pageSize,
 				take: pageSize,
-				orderBy: {
-					[validSortBy]: validSortOrder,
-				},
+				orderBy: sortBy === "appointment_date"
+					? {
+							schedules: {
+								appointment_date: validSortOrder,
+							},
+						}
+					: {
+							[validSortBy]: validSortOrder,
+						},
 				include: {
 					schedules: {
 						select: {
