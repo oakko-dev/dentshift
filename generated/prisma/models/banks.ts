@@ -28,24 +28,22 @@ export type AggregateBanks = {
 
 export type BanksAvgAggregateOutputType = {
   id: number | null
-  account_number: runtime.Decimal | null
 }
 
 export type BanksSumAggregateOutputType = {
   id: bigint | null
-  account_number: runtime.Decimal | null
 }
 
 export type BanksMinAggregateOutputType = {
   id: bigint | null
   account_name: string | null
-  account_number: runtime.Decimal | null
+  account_number: string | null
 }
 
 export type BanksMaxAggregateOutputType = {
   id: bigint | null
   account_name: string | null
-  account_number: runtime.Decimal | null
+  account_number: string | null
 }
 
 export type BanksCountAggregateOutputType = {
@@ -58,12 +56,10 @@ export type BanksCountAggregateOutputType = {
 
 export type BanksAvgAggregateInputType = {
   id?: true
-  account_number?: true
 }
 
 export type BanksSumAggregateInputType = {
   id?: true
-  account_number?: true
 }
 
 export type BanksMinAggregateInputType = {
@@ -174,7 +170,7 @@ export type banksGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type BanksGroupByOutputType = {
   id: bigint
   account_name: string
-  account_number: runtime.Decimal
+  account_number: string
   _count: BanksCountAggregateOutputType | null
   _avg: BanksAvgAggregateOutputType | null
   _sum: BanksSumAggregateOutputType | null
@@ -203,7 +199,7 @@ export type banksWhereInput = {
   NOT?: Prisma.banksWhereInput | Prisma.banksWhereInput[]
   id?: Prisma.BigIntFilter<"banks"> | bigint | number
   account_name?: Prisma.StringFilter<"banks"> | string
-  account_number?: Prisma.DecimalFilter<"banks"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number?: Prisma.StringFilter<"banks"> | string
   works?: Prisma.WorksListRelationFilter
 }
 
@@ -220,7 +216,7 @@ export type banksWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.banksWhereInput[]
   NOT?: Prisma.banksWhereInput | Prisma.banksWhereInput[]
   account_name?: Prisma.StringFilter<"banks"> | string
-  account_number?: Prisma.DecimalFilter<"banks"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number?: Prisma.StringFilter<"banks"> | string
   works?: Prisma.WorksListRelationFilter
 }, "id">
 
@@ -241,53 +237,53 @@ export type banksScalarWhereWithAggregatesInput = {
   NOT?: Prisma.banksScalarWhereWithAggregatesInput | Prisma.banksScalarWhereWithAggregatesInput[]
   id?: Prisma.BigIntWithAggregatesFilter<"banks"> | bigint | number
   account_name?: Prisma.StringWithAggregatesFilter<"banks"> | string
-  account_number?: Prisma.DecimalWithAggregatesFilter<"banks"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number?: Prisma.StringWithAggregatesFilter<"banks"> | string
 }
 
 export type banksCreateInput = {
   id?: bigint | number
   account_name: string
-  account_number: runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number: string
   works?: Prisma.worksCreateNestedManyWithoutBanksInput
 }
 
 export type banksUncheckedCreateInput = {
   id?: bigint | number
   account_name: string
-  account_number: runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number: string
   works?: Prisma.worksUncheckedCreateNestedManyWithoutBanksInput
 }
 
 export type banksUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   account_name?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
   works?: Prisma.worksUpdateManyWithoutBanksNestedInput
 }
 
 export type banksUncheckedUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   account_name?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
   works?: Prisma.worksUncheckedUpdateManyWithoutBanksNestedInput
 }
 
 export type banksCreateManyInput = {
   id?: bigint | number
   account_name: string
-  account_number: runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number: string
 }
 
 export type banksUpdateManyMutationInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   account_name?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type banksUncheckedUpdateManyInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   account_name?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type banksCountOrderByAggregateInput = {
@@ -298,7 +294,6 @@ export type banksCountOrderByAggregateInput = {
 
 export type banksAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  account_number?: Prisma.SortOrder
 }
 
 export type banksMaxOrderByAggregateInput = {
@@ -315,12 +310,11 @@ export type banksMinOrderByAggregateInput = {
 
 export type banksSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  account_number?: Prisma.SortOrder
 }
 
-export type BanksScalarRelationFilter = {
-  is?: Prisma.banksWhereInput
-  isNot?: Prisma.banksWhereInput
+export type BanksNullableScalarRelationFilter = {
+  is?: Prisma.banksWhereInput | null
+  isNot?: Prisma.banksWhereInput | null
 }
 
 export type BigIntFieldUpdateOperationsInput = {
@@ -335,24 +329,18 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type banksCreateNestedOneWithoutWorksInput = {
   create?: Prisma.XOR<Prisma.banksCreateWithoutWorksInput, Prisma.banksUncheckedCreateWithoutWorksInput>
   connectOrCreate?: Prisma.banksCreateOrConnectWithoutWorksInput
   connect?: Prisma.banksWhereUniqueInput
 }
 
-export type banksUpdateOneRequiredWithoutWorksNestedInput = {
+export type banksUpdateOneWithoutWorksNestedInput = {
   create?: Prisma.XOR<Prisma.banksCreateWithoutWorksInput, Prisma.banksUncheckedCreateWithoutWorksInput>
   connectOrCreate?: Prisma.banksCreateOrConnectWithoutWorksInput
   upsert?: Prisma.banksUpsertWithoutWorksInput
+  disconnect?: Prisma.banksWhereInput | boolean
+  delete?: Prisma.banksWhereInput | boolean
   connect?: Prisma.banksWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.banksUpdateToOneWithWhereWithoutWorksInput, Prisma.banksUpdateWithoutWorksInput>, Prisma.banksUncheckedUpdateWithoutWorksInput>
 }
@@ -360,13 +348,13 @@ export type banksUpdateOneRequiredWithoutWorksNestedInput = {
 export type banksCreateWithoutWorksInput = {
   id?: bigint | number
   account_name: string
-  account_number: runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number: string
 }
 
 export type banksUncheckedCreateWithoutWorksInput = {
   id?: bigint | number
   account_name: string
-  account_number: runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number: string
 }
 
 export type banksCreateOrConnectWithoutWorksInput = {
@@ -388,13 +376,13 @@ export type banksUpdateToOneWithWhereWithoutWorksInput = {
 export type banksUpdateWithoutWorksInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   account_name?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type banksUncheckedUpdateWithoutWorksInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   account_name?: Prisma.StringFieldUpdateOperationsInput | string
-  account_number?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -470,7 +458,7 @@ export type $banksPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
     account_name: string
-    account_number: runtime.Decimal
+    account_number: string
   }, ExtArgs["result"]["banks"]>
   composites: {}
 }
@@ -897,7 +885,7 @@ export interface Prisma__banksClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface banksFieldRefs {
   readonly id: Prisma.FieldRef<"banks", 'BigInt'>
   readonly account_name: Prisma.FieldRef<"banks", 'String'>
-  readonly account_number: Prisma.FieldRef<"banks", 'Decimal'>
+  readonly account_number: Prisma.FieldRef<"banks", 'String'>
 }
     
 

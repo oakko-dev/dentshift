@@ -55,7 +55,12 @@ export const ModelName = {
   healthcheck: 'healthcheck',
   places: 'places',
   schedules: 'schedules',
-  works: 'works'
+  works: 'works',
+  users: 'users',
+  sessions: 'sessions',
+  accounts: 'accounts',
+  verifications: 'verifications',
+  subscriptions: 'subscriptions'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -110,6 +115,7 @@ export type PlacesScalarFieldEnum = (typeof PlacesScalarFieldEnum)[keyof typeof 
 
 export const SchedulesScalarFieldEnum = {
   id: 'id',
+  user_id: 'user_id',
   created_at: 'created_at',
   place_id: 'place_id',
   appointment_date: 'appointment_date',
@@ -135,6 +141,78 @@ export const WorksScalarFieldEnum = {
 } as const
 
 export type WorksScalarFieldEnum = (typeof WorksScalarFieldEnum)[keyof typeof WorksScalarFieldEnum]
+
+
+export const UsersScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  firstname: 'firstname',
+  lastname: 'lastname',
+  email: 'email',
+  emailVerified: 'emailVerified',
+  password: 'password',
+  phone_number: 'phone_number',
+  image: 'image',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
+export const SessionsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  token: 'token',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SessionsScalarFieldEnum = (typeof SessionsScalarFieldEnum)[keyof typeof SessionsScalarFieldEnum]
+
+
+export const AccountsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  accountId: 'accountId',
+  providerId: 'providerId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  idToken: 'idToken',
+  expiresAt: 'expiresAt',
+  password: 'password',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AccountsScalarFieldEnum = (typeof AccountsScalarFieldEnum)[keyof typeof AccountsScalarFieldEnum]
+
+
+export const VerificationsScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VerificationsScalarFieldEnum = (typeof VerificationsScalarFieldEnum)[keyof typeof VerificationsScalarFieldEnum]
+
+
+export const SubscriptionsScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  endpoint: 'endpoint',
+  p256dh: 'p256dh',
+  auth: 'auth',
+  created_at: 'created_at'
+} as const
+
+export type SubscriptionsScalarFieldEnum = (typeof SubscriptionsScalarFieldEnum)[keyof typeof SubscriptionsScalarFieldEnum]
 
 
 export const SortOrder = {

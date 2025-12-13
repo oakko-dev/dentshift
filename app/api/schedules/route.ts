@@ -1,7 +1,9 @@
 import type { NextRequest } from "next/server"
 
 import { NextResponse } from "next/server"
+import { auth } from "@/auth"
 import prisma from "@/lib/prisma"
+import { sendNotificationToUser } from "@/lib/push-notifications"
 
 export async function GET(request: NextRequest) {
 	try {
@@ -28,6 +30,8 @@ export async function GET(request: NextRequest) {
 						select: {
 							name: true,
 							branch: true,
+							start_time: true,
+							end_time: true,
 						},
 					},
 				},
@@ -41,6 +45,8 @@ export async function GET(request: NextRequest) {
 				place_id: Number(schedule.place_id),
 				place_name: schedule.places.name,
 				place_branch: schedule.places.branch,
+				place_start_time: schedule.places.start_time.toISOString(),
+				place_end_time: schedule.places.end_time.toISOString(),
 				appointment_date: schedule.appointment_date.toISOString(),
 				df_guarantee_amount: Number(schedule.df_guarantee_amount),
 				df_percent: Number(schedule.df_percent),
@@ -63,6 +69,11 @@ export async function GET(request: NextRequest) {
 // POST create new schedule
 export async function POST(request: NextRequest) {
 	try {
+		// Get current user session
+		const session = await auth.api.getSession({
+			headers: request.headers,
+		})
+
 		const body = await request.json()
 		const { appointment_date, place_id, df_guarantee_amount, df_percent, remark } = body
 
@@ -73,8 +84,39 @@ export async function POST(request: NextRequest) {
 				df_guarantee_amount,
 				df_percent,
 				remark: remark || null,
+				user_id: session?.user?.id || null,
+			},
+			include: {
+				places: {
+					select: {
+						name: true,
+						branch: true,
+					},
+				},
 			},
 		})
+
+		// Send push notification to the user if they have subscriptions
+		if (session?.user?.id) {
+			const appointmentDate = new Date(appointment_date).toLocaleDateString("th-TH", {
+				year: "numeric",
+				month: "long",
+				day: "numeric",
+			})
+
+			await sendNotificationToUser(session.user.id, {
+				title: "สร้างตารางนัดหมายสำเร็จ",
+				body: `นัดหมายที่ ${newSchedule.places.name} - ${newSchedule.places.branch} วันที่ ${appointmentDate}`,
+				icon: "/logo-192x192.png",
+				data: {
+					url: "/schedules",
+					scheduleId: Number(newSchedule.id),
+				},
+			}).catch(error => {
+				// Don't fail the request if notification fails
+				console.error("Failed to send notification:", error)
+			})
+		}
 
 		return NextResponse.json({
 			id: Number(newSchedule.id),

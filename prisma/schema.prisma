@@ -1,17 +1,17 @@
-// prisma/schema.prisma
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
+
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model banks {
   id             BigInt  @id @default(autoincrement())
   account_name   String
-  account_number Decimal @db.Decimal
+  account_number String
   works          works[]
 }
 
@@ -40,6 +40,7 @@ model places {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model schedules {
   id                  BigInt   @id @default(autoincrement())
+  user_id             String?  @db.Uuid
   created_at          DateTime @default(now()) @db.Timestamptz(6)
   place_id            BigInt
   appointment_date    DateTime @db.Date
@@ -47,6 +48,7 @@ model schedules {
   df_percent          Decimal  @db.Decimal
   remark              String?
   places              places   @relation(fields: [place_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users               users?   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   works               works[]
 }
 
@@ -57,11 +59,98 @@ model works {
   schedule_id           BigInt
   total_amount          Decimal   @db.Decimal
   df_amount             Decimal   @db.Decimal
-  bank_id               BigInt
+  bank_id               BigInt?
   forecast_payment_date DateTime  @db.Date
   remark                String?
   deposit_date          DateTime? @db.Date
   deposit_amount        Decimal?  @db.Decimal
-  banks                 banks     @relation(fields: [bank_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  banks                 banks?    @relation(fields: [bank_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   schedules             schedules @relation(fields: [schedule_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String?
+  firstname     String?
+  lastname      String?
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  password      String?
+  phone_number  String?
+  image         String?
+  
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // A user can have many push subscriptions
+  subscriptions subscriptions[]
+  schedules     schedules[]
+  sessions      sessions[]
+  accounts      accounts[]
+  
+  @@map("users")
+}
+
+model sessions {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+  token     String   @unique
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  
+  user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sessions")
+}
+
+model accounts {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  accountId       String   @map("account_id")
+  providerId      String   @map("provider_id")
+  accessToken     String?  @map("access_token")
+  refreshToken    String?  @map("refresh_token")
+  idToken         String?  @map("id_token")
+  expiresAt       DateTime? @map("expires_at") @db.Timestamptz(6)
+  password        String?
+  
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  
+  user          users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("accounts")
+}
+
+model verifications {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  identifier String
+  value      String
+  expiresAt  DateTime @map("expires_at") @db.Timestamptz(6)
+  
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  
+  @@map("verifications")
+}
+
+model subscriptions {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  
+  // The 'endpoint' is the unique ID provided by the browser push service
+  endpoint   String   @unique
+  
+  // These keys are required to encrypt the payload
+  p256dh     String
+  auth       String
+  
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  users      users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  @@index([user_id])
 }

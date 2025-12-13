@@ -17,10 +17,10 @@ import type * as Prisma from "./prismaNamespace"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.0.1",
-  "engineVersion": "f09f2815f091dbba658cdcd2264306d88bb5bda6",
+  "clientVersion": "7.1.0",
+  "engineVersion": "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba",
   "activeProvider": "postgresql",
-  "inlineSchema": "// prisma/schema.prisma\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel banks {\n  id             BigInt  @id @default(autoincrement())\n  account_name   String\n  account_number Decimal @db.Decimal\n  works          works[]\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel healthcheck {\n  id         BigInt    @id @default(autoincrement())\n  name       String?   @db.VarChar\n  count      BigInt?\n  updated_at DateTime? @db.Timestamptz(6)\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel places {\n  id         BigInt      @id @default(autoincrement())\n  name       String      @db.VarChar\n  branch     String      @db.VarChar\n  location   String?\n  tag        String?\n  start_time DateTime    @db.Time(6)\n  end_time   DateTime    @db.Time(6)\n  tax_type   String?     @db.VarChar\n  remark     String?\n  schedules  schedules[]\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel schedules {\n  id                  BigInt   @id @default(autoincrement())\n  created_at          DateTime @default(now()) @db.Timestamptz(6)\n  place_id            BigInt\n  appointment_date    DateTime @db.Date\n  df_guarantee_amount Decimal  @db.Decimal\n  df_percent          Decimal  @db.Decimal\n  remark              String?\n  places              places   @relation(fields: [place_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n  works               works[]\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel works {\n  id                    BigInt    @id @default(autoincrement())\n  created_at            DateTime  @default(now()) @db.Timestamptz(6)\n  schedule_id           BigInt\n  total_amount          Decimal   @db.Decimal\n  df_amount             Decimal   @db.Decimal\n  bank_id               BigInt\n  forecast_payment_date DateTime  @db.Date\n  remark                String?\n  deposit_date          DateTime? @db.Date\n  deposit_amount        Decimal?  @db.Decimal\n  banks                 banks     @relation(fields: [bank_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n  schedules             schedules @relation(fields: [schedule_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel banks {\n  id             BigInt  @id @default(autoincrement())\n  account_name   String\n  account_number String\n  works          works[]\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel healthcheck {\n  id         BigInt    @id @default(autoincrement())\n  name       String?   @db.VarChar\n  count      BigInt?\n  updated_at DateTime? @db.Timestamptz(6)\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel places {\n  id         BigInt      @id @default(autoincrement())\n  name       String      @db.VarChar\n  branch     String      @db.VarChar\n  location   String?\n  tag        String?\n  start_time DateTime    @db.Time(6)\n  end_time   DateTime    @db.Time(6)\n  tax_type   String?     @db.VarChar\n  remark     String?\n  schedules  schedules[]\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel schedules {\n  id                  BigInt   @id @default(autoincrement())\n  user_id             String?  @db.Uuid\n  created_at          DateTime @default(now()) @db.Timestamptz(6)\n  place_id            BigInt\n  appointment_date    DateTime @db.Date\n  df_guarantee_amount Decimal  @db.Decimal\n  df_percent          Decimal  @db.Decimal\n  remark              String?\n  places              places   @relation(fields: [place_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n  users               users?   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n  works               works[]\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel works {\n  id                    BigInt    @id @default(autoincrement())\n  created_at            DateTime  @default(now()) @db.Timestamptz(6)\n  schedule_id           BigInt\n  total_amount          Decimal   @db.Decimal\n  df_amount             Decimal   @db.Decimal\n  bank_id               BigInt?\n  forecast_payment_date DateTime  @db.Date\n  remark                String?\n  deposit_date          DateTime? @db.Date\n  deposit_amount        Decimal?  @db.Decimal\n  banks                 banks?    @relation(fields: [bank_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n  schedules             schedules @relation(fields: [schedule_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n}\n\nmodel users {\n  id            String  @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  name          String?\n  firstname     String?\n  lastname      String?\n  email         String  @unique\n  emailVerified Boolean @default(false)\n  password      String?\n  phone_number  String?\n  image         String?\n\n  createdAt DateTime @default(now()) @map(\"created_at\") @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @map(\"updated_at\") @db.Timestamptz(6)\n\n  // A user can have many push subscriptions\n  subscriptions subscriptions[]\n  schedules     schedules[]\n  sessions      sessions[]\n  accounts      accounts[]\n\n  @@map(\"users\")\n}\n\nmodel sessions {\n  id        String   @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  userId    String   @map(\"user_id\") @db.Uuid\n  expiresAt DateTime @map(\"expires_at\") @db.Timestamptz(6)\n  token     String   @unique\n  ipAddress String?  @map(\"ip_address\")\n  userAgent String?  @map(\"user_agent\")\n\n  createdAt DateTime @default(now()) @map(\"created_at\") @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @map(\"updated_at\") @db.Timestamptz(6)\n\n  user users @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map(\"sessions\")\n}\n\nmodel accounts {\n  id           String    @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  userId       String    @map(\"user_id\") @db.Uuid\n  accountId    String    @map(\"account_id\")\n  providerId   String    @map(\"provider_id\")\n  accessToken  String?   @map(\"access_token\")\n  refreshToken String?   @map(\"refresh_token\")\n  idToken      String?   @map(\"id_token\")\n  expiresAt    DateTime? @map(\"expires_at\") @db.Timestamptz(6)\n  password     String?\n\n  createdAt DateTime @default(now()) @map(\"created_at\") @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @map(\"updated_at\") @db.Timestamptz(6)\n\n  user users @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map(\"accounts\")\n}\n\nmodel verifications {\n  id         String   @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  identifier String\n  value      String\n  expiresAt  DateTime @map(\"expires_at\") @db.Timestamptz(6)\n\n  createdAt DateTime @default(now()) @map(\"created_at\") @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @map(\"updated_at\") @db.Timestamptz(6)\n\n  @@map(\"verifications\")\n}\n\nmodel subscriptions {\n  id      String @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  user_id String @db.Uuid\n\n  // The 'endpoint' is the unique ID provided by the browser push service\n  endpoint String @unique\n\n  // These keys are required to encrypt the payload\n  p256dh String\n  auth   String\n\n  created_at DateTime @default(now()) @db.Timestamptz(6)\n\n  users users @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n\n  @@index([user_id])\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"banks\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"account_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"account_number\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"works\",\"kind\":\"object\",\"type\":\"works\",\"relationName\":\"banksToworks\"}],\"dbName\":null},\"healthcheck\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"count\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"places\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"branch\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"location\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tag\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"start_time\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"end_time\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tax_type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"remark\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"schedules\",\"kind\":\"object\",\"type\":\"schedules\",\"relationName\":\"placesToschedules\"}],\"dbName\":null},\"schedules\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"place_id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"appointment_date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"df_guarantee_amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"df_percent\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"remark\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"places\",\"kind\":\"object\",\"type\":\"places\",\"relationName\":\"placesToschedules\"},{\"name\":\"works\",\"kind\":\"object\",\"type\":\"works\",\"relationName\":\"schedulesToworks\"}],\"dbName\":null},\"works\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"schedule_id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"total_amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"df_amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"bank_id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"forecast_payment_date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"remark\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"deposit_date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"deposit_amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"banks\",\"kind\":\"object\",\"type\":\"banks\",\"relationName\":\"banksToworks\"},{\"name\":\"schedules\",\"kind\":\"object\",\"type\":\"schedules\",\"relationName\":\"schedulesToworks\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"banks\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"account_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"account_number\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"works\",\"kind\":\"object\",\"type\":\"works\",\"relationName\":\"banksToworks\"}],\"dbName\":null},\"healthcheck\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"count\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"updated_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"places\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"branch\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"location\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tag\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"start_time\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"end_time\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tax_type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"remark\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"schedules\",\"kind\":\"object\",\"type\":\"schedules\",\"relationName\":\"placesToschedules\"}],\"dbName\":null},\"schedules\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"place_id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"appointment_date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"df_guarantee_amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"df_percent\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"remark\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"places\",\"kind\":\"object\",\"type\":\"places\",\"relationName\":\"placesToschedules\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"users\",\"relationName\":\"schedulesTousers\"},{\"name\":\"works\",\"kind\":\"object\",\"type\":\"works\",\"relationName\":\"schedulesToworks\"}],\"dbName\":null},\"works\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"schedule_id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"total_amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"df_amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"bank_id\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"forecast_payment_date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"remark\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"deposit_date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"deposit_amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"banks\",\"kind\":\"object\",\"type\":\"banks\",\"relationName\":\"banksToworks\"},{\"name\":\"schedules\",\"kind\":\"object\",\"type\":\"schedules\",\"relationName\":\"schedulesToworks\"}],\"dbName\":null},\"users\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone_number\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"subscriptions\",\"kind\":\"object\",\"type\":\"subscriptions\",\"relationName\":\"subscriptionsTousers\"},{\"name\":\"schedules\",\"kind\":\"object\",\"type\":\"schedules\",\"relationName\":\"schedulesTousers\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"sessions\",\"relationName\":\"sessionsTousers\"},{\"name\":\"accounts\",\"kind\":\"object\",\"type\":\"accounts\",\"relationName\":\"accountsTousers\"}],\"dbName\":\"users\"},\"sessions\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"user_id\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"expires_at\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ipAddress\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"ip_address\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"user_agent\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"users\",\"relationName\":\"sessionsTousers\"}],\"dbName\":\"sessions\"},\"accounts\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"user_id\"},{\"name\":\"accountId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"account_id\"},{\"name\":\"providerId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"provider_id\"},{\"name\":\"accessToken\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"access_token\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"refresh_token\"},{\"name\":\"idToken\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"id_token\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"expires_at\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"users\",\"relationName\":\"accountsTousers\"}],\"dbName\":\"accounts\"},\"verifications\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"identifier\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"expires_at\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"}],\"dbName\":\"verifications\"},\"subscriptions\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"endpoint\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"p256dh\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"auth\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"users\",\"relationName\":\"subscriptionsTousers\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -62,7 +62,7 @@ export interface PrismaClientConstructor {
    * const banks = await prisma.banks.findMany()
    * ```
    * 
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
+   * Read more in our [docs](https://pris.ly/d/client).
    */
 
   new <
@@ -84,7 +84,7 @@ export interface PrismaClientConstructor {
  * const banks = await prisma.banks.findMany()
  * ```
  * 
- * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
+ * Read more in our [docs](https://pris.ly/d/client).
  */
 
 export interface PrismaClient<
@@ -113,7 +113,7 @@ export interface PrismaClient<
    * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -125,7 +125,7 @@ export interface PrismaClient<
    * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -136,7 +136,7 @@ export interface PrismaClient<
    * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
 
@@ -148,7 +148,7 @@ export interface PrismaClient<
    * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
 
@@ -223,6 +223,56 @@ export interface PrismaClient<
     * ```
     */
   get works(): Prisma.worksDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.users`: Exposes CRUD operations for the **users** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Users
+    * const users = await prisma.users.findMany()
+    * ```
+    */
+  get users(): Prisma.usersDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.sessions`: Exposes CRUD operations for the **sessions** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Sessions
+    * const sessions = await prisma.sessions.findMany()
+    * ```
+    */
+  get sessions(): Prisma.sessionsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.accounts`: Exposes CRUD operations for the **accounts** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Accounts
+    * const accounts = await prisma.accounts.findMany()
+    * ```
+    */
+  get accounts(): Prisma.accountsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.verifications`: Exposes CRUD operations for the **verifications** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Verifications
+    * const verifications = await prisma.verifications.findMany()
+    * ```
+    */
+  get verifications(): Prisma.verificationsDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.subscriptions`: Exposes CRUD operations for the **subscriptions** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Subscriptions
+    * const subscriptions = await prisma.subscriptions.findMany()
+    * ```
+    */
+  get subscriptions(): Prisma.subscriptionsDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

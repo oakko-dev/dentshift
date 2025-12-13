@@ -33,7 +33,7 @@ export * from "./enums"
  * const banks = await prisma.banks.findMany()
  * ```
  * 
- * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
+ * Read more in our [docs](https://pris.ly/d/client).
  */
 export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
@@ -64,3 +64,28 @@ export type schedules = Prisma.schedulesModel
  * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
  */
 export type works = Prisma.worksModel
+/**
+ * Model users
+ * 
+ */
+export type users = Prisma.usersModel
+/**
+ * Model sessions
+ * 
+ */
+export type sessions = Prisma.sessionsModel
+/**
+ * Model accounts
+ * 
+ */
+export type accounts = Prisma.accountsModel
+/**
+ * Model verifications
+ * 
+ */
+export type verifications = Prisma.verificationsModel
+/**
+ * Model subscriptions
+ * 
+ */
+export type subscriptions = Prisma.subscriptionsModel

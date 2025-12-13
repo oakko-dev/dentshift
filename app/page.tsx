@@ -8,6 +8,7 @@ import { useMemo, useState } from "react"
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { Combobox } from "@/components/common/combobox"
 import ErrorComponent from "@/components/common/error"
+import PushNotificationManager from "@/components/pwa/push-notification-manager"
 import { useDashboardChartData, useDashboardStats } from "@/lib/react-query/dashboards"
 import { useScheduleLists } from "@/lib/react-query/schedules"
 import { MasterSelectProps } from "@/types/global"
@@ -349,7 +350,7 @@ export default function Home() {
 								<div className="grid grid-cols-7 gap-2">
 									{Array.from({ length: 35 }).map((_, idx) => (
 										<div
-											key={`skeleton-${calendarMonth.getMonth()}-${idx}`}
+											key={`skeleton-${calendarMonth.getMonth()}-${uniqueId()}`}
 											className="flex min-h-[80px] animate-pulse flex-col rounded-lg border border-gray-200 bg-gray-100 p-2"
 										>
 											<div className="mb-2 h-4 w-6 rounded bg-gray-200"></div>
@@ -423,6 +424,17 @@ export default function Home() {
 												{todayWork.place_branch && (
 													<p className="text-foreground/80 text-lg">{todayWork.place_branch}</p>
 												)}
+												{todayWork.place_start_time && todayWork.place_end_time && (
+													<div className="mt-2 flex items-center gap-2">
+														<Icon icon="lucide:clock" className="text-foreground/60 h-4 w-4" />
+														<p className="text-foreground text-sm">
+															{todayWork.place_start_time.substring(11, 16)}
+															{" - "}
+															{todayWork.place_end_time.substring(11, 16)}
+															{" น."}
+														</p>
+													</div>
+												)}
 												<div className="bg-primary/5 mt-4 flex flex-col gap-2 rounded-lg p-3">
 													<div className="flex items-center justify-between text-sm">
 														<span className="text-foreground/60">ค่ามัดจำ:</span>
@@ -488,6 +500,17 @@ export default function Home() {
 														{format(new Date(upcomingWork.appointment_date), "d MMMM yyyy", { locale: th }).replace(/\d{4}/, year => (Number.parseInt(year) + 543).toString())}
 													</p>
 												</div>
+												{upcomingWork.place_start_time && upcomingWork.place_end_time && (
+													<div className="mt-2 flex items-center gap-2">
+														<Icon icon="lucide:clock" className="text-foreground/60 h-4 w-4" />
+														<p className="text-foreground text-sm">
+															{upcomingWork.place_start_time.substring(11, 16)}
+															{" - "}
+															{upcomingWork.place_end_time.substring(11, 16)}
+															{" น."}
+														</p>
+													</div>
+												)}
 												<div className="bg-warning/5 mt-4 flex flex-col gap-2 rounded-lg p-3">
 													<div className="flex items-center justify-between text-sm">
 														<span className="text-foreground/60">ค่ามัดจำ:</span>

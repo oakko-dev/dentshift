@@ -20,7 +20,7 @@ export const swal = sweetalert.mixin({
 		confirmButton:
 			"flex justify-center items-center rounded-[10px] px-4 py-2 min-w-[75px] gap-x-1 text-white bg-primary hover:bg-primary-dark hover:cursor-pointer",
 		denyButton:
-			"flex justify-center items-center rounded-[10px] px-4 py-2 min-w-[75px] gap-x-1 text-red border border-destructive hover:bg-destructive hover:text-white hover:cursor-pointer",
+			"flex justify-center items-center rounded-[10px] px-4 py-2 min-w-[75px] gap-x-1 text-destruction border border-destructive hover:bg-destructive hover:text-white hover:cursor-pointer",
 	},
 })
 

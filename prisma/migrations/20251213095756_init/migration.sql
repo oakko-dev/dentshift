@@ -1,11 +1,8 @@
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "public";
-
 -- CreateTable
 CREATE TABLE "banks" (
     "id" BIGSERIAL NOT NULL,
     "account_name" TEXT NOT NULL,
-    "account_number" DECIMAL NOT NULL,
+    "account_number" TEXT NOT NULL,
 
     CONSTRAINT "banks_pkey" PRIMARY KEY ("id")
 );
@@ -55,7 +52,7 @@ CREATE TABLE "works" (
     "schedule_id" BIGINT NOT NULL,
     "total_amount" DECIMAL NOT NULL,
     "df_amount" DECIMAL NOT NULL,
-    "bank_id" BIGINT NOT NULL,
+    "bank_id" BIGINT,
     "forecast_payment_date" DATE NOT NULL,
     "remark" TEXT,
     "deposit_date" DATE,
@@ -72,4 +69,3 @@ ALTER TABLE "works" ADD CONSTRAINT "works_bank_id_fkey" FOREIGN KEY ("bank_id") 
 
 -- AddForeignKey
 ALTER TABLE "works" ADD CONSTRAINT "works_schedule_id_fkey" FOREIGN KEY ("schedule_id") REFERENCES "schedules"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-

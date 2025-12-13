@@ -36,11 +36,10 @@ export default function Layouts({ children }: LayoutsProps) {
 		case "/error":
 			return children
 		case "/login":
-		case "/forgot-password":
-		case "/reset-password":
 			return (
 				<>
 					<QueryClientProvider client={queryClient}>
+						<Toaster />
 						{children}
 						{setLoadingPortal()}
 					</QueryClientProvider>

@@ -42,3 +42,28 @@ export type schedules = Prisma.schedulesModel
  * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
  */
 export type works = Prisma.worksModel
+/**
+ * Model users
+ * 
+ */
+export type users = Prisma.usersModel
+/**
+ * Model sessions
+ * 
+ */
+export type sessions = Prisma.sessionsModel
+/**
+ * Model accounts
+ * 
+ */
+export type accounts = Prisma.accountsModel
+/**
+ * Model verifications
+ * 
+ */
+export type verifications = Prisma.verificationsModel
+/**
+ * Model subscriptions
+ * 
+ */
+export type subscriptions = Prisma.subscriptionsModel

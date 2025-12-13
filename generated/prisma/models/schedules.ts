@@ -42,6 +42,7 @@ export type SchedulesSumAggregateOutputType = {
 
 export type SchedulesMinAggregateOutputType = {
   id: bigint | null
+  user_id: string | null
   created_at: Date | null
   place_id: bigint | null
   appointment_date: Date | null
@@ -52,6 +53,7 @@ export type SchedulesMinAggregateOutputType = {
 
 export type SchedulesMaxAggregateOutputType = {
   id: bigint | null
+  user_id: string | null
   created_at: Date | null
   place_id: bigint | null
   appointment_date: Date | null
@@ -62,6 +64,7 @@ export type SchedulesMaxAggregateOutputType = {
 
 export type SchedulesCountAggregateOutputType = {
   id: number
+  user_id: number
   created_at: number
   place_id: number
   appointment_date: number
@@ -88,6 +91,7 @@ export type SchedulesSumAggregateInputType = {
 
 export type SchedulesMinAggregateInputType = {
   id?: true
+  user_id?: true
   created_at?: true
   place_id?: true
   appointment_date?: true
@@ -98,6 +102,7 @@ export type SchedulesMinAggregateInputType = {
 
 export type SchedulesMaxAggregateInputType = {
   id?: true
+  user_id?: true
   created_at?: true
   place_id?: true
   appointment_date?: true
@@ -108,6 +113,7 @@ export type SchedulesMaxAggregateInputType = {
 
 export type SchedulesCountAggregateInputType = {
   id?: true
+  user_id?: true
   created_at?: true
   place_id?: true
   appointment_date?: true
@@ -205,6 +211,7 @@ export type schedulesGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 
 export type SchedulesGroupByOutputType = {
   id: bigint
+  user_id: string | null
   created_at: Date
   place_id: bigint
   appointment_date: Date
@@ -238,6 +245,7 @@ export type schedulesWhereInput = {
   OR?: Prisma.schedulesWhereInput[]
   NOT?: Prisma.schedulesWhereInput | Prisma.schedulesWhereInput[]
   id?: Prisma.BigIntFilter<"schedules"> | bigint | number
+  user_id?: Prisma.UuidNullableFilter<"schedules"> | string | null
   created_at?: Prisma.DateTimeFilter<"schedules"> | Date | string
   place_id?: Prisma.BigIntFilter<"schedules"> | bigint | number
   appointment_date?: Prisma.DateTimeFilter<"schedules"> | Date | string
@@ -245,11 +253,13 @@ export type schedulesWhereInput = {
   df_percent?: Prisma.DecimalFilter<"schedules"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   remark?: Prisma.StringNullableFilter<"schedules"> | string | null
   places?: Prisma.XOR<Prisma.PlacesScalarRelationFilter, Prisma.placesWhereInput>
+  users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   works?: Prisma.WorksListRelationFilter
 }
 
 export type schedulesOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   place_id?: Prisma.SortOrder
   appointment_date?: Prisma.SortOrder
@@ -257,6 +267,7 @@ export type schedulesOrderByWithRelationInput = {
   df_percent?: Prisma.SortOrder
   remark?: Prisma.SortOrderInput | Prisma.SortOrder
   places?: Prisma.placesOrderByWithRelationInput
+  users?: Prisma.usersOrderByWithRelationInput
   works?: Prisma.worksOrderByRelationAggregateInput
 }
 
@@ -265,6 +276,7 @@ export type schedulesWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.schedulesWhereInput | Prisma.schedulesWhereInput[]
   OR?: Prisma.schedulesWhereInput[]
   NOT?: Prisma.schedulesWhereInput | Prisma.schedulesWhereInput[]
+  user_id?: Prisma.UuidNullableFilter<"schedules"> | string | null
   created_at?: Prisma.DateTimeFilter<"schedules"> | Date | string
   place_id?: Prisma.BigIntFilter<"schedules"> | bigint | number
   appointment_date?: Prisma.DateTimeFilter<"schedules"> | Date | string
@@ -272,11 +284,13 @@ export type schedulesWhereUniqueInput = Prisma.AtLeast<{
   df_percent?: Prisma.DecimalFilter<"schedules"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   remark?: Prisma.StringNullableFilter<"schedules"> | string | null
   places?: Prisma.XOR<Prisma.PlacesScalarRelationFilter, Prisma.placesWhereInput>
+  users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   works?: Prisma.WorksListRelationFilter
 }, "id">
 
 export type schedulesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   place_id?: Prisma.SortOrder
   appointment_date?: Prisma.SortOrder
@@ -295,6 +309,7 @@ export type schedulesScalarWhereWithAggregatesInput = {
   OR?: Prisma.schedulesScalarWhereWithAggregatesInput[]
   NOT?: Prisma.schedulesScalarWhereWithAggregatesInput | Prisma.schedulesScalarWhereWithAggregatesInput[]
   id?: Prisma.BigIntWithAggregatesFilter<"schedules"> | bigint | number
+  user_id?: Prisma.UuidNullableWithAggregatesFilter<"schedules"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"schedules"> | Date | string
   place_id?: Prisma.BigIntWithAggregatesFilter<"schedules"> | bigint | number
   appointment_date?: Prisma.DateTimeWithAggregatesFilter<"schedules"> | Date | string
@@ -311,11 +326,13 @@ export type schedulesCreateInput = {
   df_percent: runtime.Decimal | runtime.DecimalJsLike | number | string
   remark?: string | null
   places: Prisma.placesCreateNestedOneWithoutSchedulesInput
+  users?: Prisma.usersCreateNestedOneWithoutSchedulesInput
   works?: Prisma.worksCreateNestedManyWithoutSchedulesInput
 }
 
 export type schedulesUncheckedCreateInput = {
   id?: bigint | number
+  user_id?: string | null
   created_at?: Date | string
   place_id: bigint | number
   appointment_date: Date | string
@@ -333,11 +350,13 @@ export type schedulesUpdateInput = {
   df_percent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   places?: Prisma.placesUpdateOneRequiredWithoutSchedulesNestedInput
+  users?: Prisma.usersUpdateOneWithoutSchedulesNestedInput
   works?: Prisma.worksUpdateManyWithoutSchedulesNestedInput
 }
 
 export type schedulesUncheckedUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   place_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   appointment_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -349,6 +368,7 @@ export type schedulesUncheckedUpdateInput = {
 
 export type schedulesCreateManyInput = {
   id?: bigint | number
+  user_id?: string | null
   created_at?: Date | string
   place_id: bigint | number
   appointment_date: Date | string
@@ -368,6 +388,7 @@ export type schedulesUpdateManyMutationInput = {
 
 export type schedulesUncheckedUpdateManyInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   place_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   appointment_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -388,6 +409,7 @@ export type schedulesOrderByRelationAggregateInput = {
 
 export type schedulesCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   place_id?: Prisma.SortOrder
   appointment_date?: Prisma.SortOrder
@@ -405,6 +427,7 @@ export type schedulesAvgOrderByAggregateInput = {
 
 export type schedulesMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   place_id?: Prisma.SortOrder
   appointment_date?: Prisma.SortOrder
@@ -415,6 +438,7 @@ export type schedulesMaxOrderByAggregateInput = {
 
 export type schedulesMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   place_id?: Prisma.SortOrder
   appointment_date?: Prisma.SortOrder
@@ -477,6 +501,14 @@ export type schedulesUncheckedUpdateManyWithoutPlacesNestedInput = {
   deleteMany?: Prisma.schedulesScalarWhereInput | Prisma.schedulesScalarWhereInput[]
 }
 
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
 export type schedulesCreateNestedOneWithoutWorksInput = {
   create?: Prisma.XOR<Prisma.schedulesCreateWithoutWorksInput, Prisma.schedulesUncheckedCreateWithoutWorksInput>
   connectOrCreate?: Prisma.schedulesCreateOrConnectWithoutWorksInput
@@ -491,6 +523,48 @@ export type schedulesUpdateOneRequiredWithoutWorksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.schedulesUpdateToOneWithWhereWithoutWorksInput, Prisma.schedulesUpdateWithoutWorksInput>, Prisma.schedulesUncheckedUpdateWithoutWorksInput>
 }
 
+export type schedulesCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.schedulesCreateWithoutUsersInput, Prisma.schedulesUncheckedCreateWithoutUsersInput> | Prisma.schedulesCreateWithoutUsersInput[] | Prisma.schedulesUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.schedulesCreateOrConnectWithoutUsersInput | Prisma.schedulesCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.schedulesCreateManyUsersInputEnvelope
+  connect?: Prisma.schedulesWhereUniqueInput | Prisma.schedulesWhereUniqueInput[]
+}
+
+export type schedulesUncheckedCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.schedulesCreateWithoutUsersInput, Prisma.schedulesUncheckedCreateWithoutUsersInput> | Prisma.schedulesCreateWithoutUsersInput[] | Prisma.schedulesUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.schedulesCreateOrConnectWithoutUsersInput | Prisma.schedulesCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.schedulesCreateManyUsersInputEnvelope
+  connect?: Prisma.schedulesWhereUniqueInput | Prisma.schedulesWhereUniqueInput[]
+}
+
+export type schedulesUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.schedulesCreateWithoutUsersInput, Prisma.schedulesUncheckedCreateWithoutUsersInput> | Prisma.schedulesCreateWithoutUsersInput[] | Prisma.schedulesUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.schedulesCreateOrConnectWithoutUsersInput | Prisma.schedulesCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.schedulesUpsertWithWhereUniqueWithoutUsersInput | Prisma.schedulesUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.schedulesCreateManyUsersInputEnvelope
+  set?: Prisma.schedulesWhereUniqueInput | Prisma.schedulesWhereUniqueInput[]
+  disconnect?: Prisma.schedulesWhereUniqueInput | Prisma.schedulesWhereUniqueInput[]
+  delete?: Prisma.schedulesWhereUniqueInput | Prisma.schedulesWhereUniqueInput[]
+  connect?: Prisma.schedulesWhereUniqueInput | Prisma.schedulesWhereUniqueInput[]
+  update?: Prisma.schedulesUpdateWithWhereUniqueWithoutUsersInput | Prisma.schedulesUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.schedulesUpdateManyWithWhereWithoutUsersInput | Prisma.schedulesUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.schedulesScalarWhereInput | Prisma.schedulesScalarWhereInput[]
+}
+
+export type schedulesUncheckedUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.schedulesCreateWithoutUsersInput, Prisma.schedulesUncheckedCreateWithoutUsersInput> | Prisma.schedulesCreateWithoutUsersInput[] | Prisma.schedulesUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.schedulesCreateOrConnectWithoutUsersInput | Prisma.schedulesCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.schedulesUpsertWithWhereUniqueWithoutUsersInput | Prisma.schedulesUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.schedulesCreateManyUsersInputEnvelope
+  set?: Prisma.schedulesWhereUniqueInput | Prisma.schedulesWhereUniqueInput[]
+  disconnect?: Prisma.schedulesWhereUniqueInput | Prisma.schedulesWhereUniqueInput[]
+  delete?: Prisma.schedulesWhereUniqueInput | Prisma.schedulesWhereUniqueInput[]
+  connect?: Prisma.schedulesWhereUniqueInput | Prisma.schedulesWhereUniqueInput[]
+  update?: Prisma.schedulesUpdateWithWhereUniqueWithoutUsersInput | Prisma.schedulesUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.schedulesUpdateManyWithWhereWithoutUsersInput | Prisma.schedulesUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.schedulesScalarWhereInput | Prisma.schedulesScalarWhereInput[]
+}
+
 export type schedulesCreateWithoutPlacesInput = {
   id?: bigint | number
   created_at?: Date | string
@@ -498,11 +572,13 @@ export type schedulesCreateWithoutPlacesInput = {
   df_guarantee_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   df_percent: runtime.Decimal | runtime.DecimalJsLike | number | string
   remark?: string | null
+  users?: Prisma.usersCreateNestedOneWithoutSchedulesInput
   works?: Prisma.worksCreateNestedManyWithoutSchedulesInput
 }
 
 export type schedulesUncheckedCreateWithoutPlacesInput = {
   id?: bigint | number
+  user_id?: string | null
   created_at?: Date | string
   appointment_date: Date | string
   df_guarantee_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -542,6 +618,7 @@ export type schedulesScalarWhereInput = {
   OR?: Prisma.schedulesScalarWhereInput[]
   NOT?: Prisma.schedulesScalarWhereInput | Prisma.schedulesScalarWhereInput[]
   id?: Prisma.BigIntFilter<"schedules"> | bigint | number
+  user_id?: Prisma.UuidNullableFilter<"schedules"> | string | null
   created_at?: Prisma.DateTimeFilter<"schedules"> | Date | string
   place_id?: Prisma.BigIntFilter<"schedules"> | bigint | number
   appointment_date?: Prisma.DateTimeFilter<"schedules"> | Date | string
@@ -558,10 +635,12 @@ export type schedulesCreateWithoutWorksInput = {
   df_percent: runtime.Decimal | runtime.DecimalJsLike | number | string
   remark?: string | null
   places: Prisma.placesCreateNestedOneWithoutSchedulesInput
+  users?: Prisma.usersCreateNestedOneWithoutSchedulesInput
 }
 
 export type schedulesUncheckedCreateWithoutWorksInput = {
   id?: bigint | number
+  user_id?: string | null
   created_at?: Date | string
   place_id: bigint | number
   appointment_date: Date | string
@@ -594,10 +673,12 @@ export type schedulesUpdateWithoutWorksInput = {
   df_percent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   places?: Prisma.placesUpdateOneRequiredWithoutSchedulesNestedInput
+  users?: Prisma.usersUpdateOneWithoutSchedulesNestedInput
 }
 
 export type schedulesUncheckedUpdateWithoutWorksInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   place_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   appointment_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -606,8 +687,57 @@ export type schedulesUncheckedUpdateWithoutWorksInput = {
   remark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+export type schedulesCreateWithoutUsersInput = {
+  id?: bigint | number
+  created_at?: Date | string
+  appointment_date: Date | string
+  df_guarantee_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_percent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remark?: string | null
+  places: Prisma.placesCreateNestedOneWithoutSchedulesInput
+  works?: Prisma.worksCreateNestedManyWithoutSchedulesInput
+}
+
+export type schedulesUncheckedCreateWithoutUsersInput = {
+  id?: bigint | number
+  created_at?: Date | string
+  place_id: bigint | number
+  appointment_date: Date | string
+  df_guarantee_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_percent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remark?: string | null
+  works?: Prisma.worksUncheckedCreateNestedManyWithoutSchedulesInput
+}
+
+export type schedulesCreateOrConnectWithoutUsersInput = {
+  where: Prisma.schedulesWhereUniqueInput
+  create: Prisma.XOR<Prisma.schedulesCreateWithoutUsersInput, Prisma.schedulesUncheckedCreateWithoutUsersInput>
+}
+
+export type schedulesCreateManyUsersInputEnvelope = {
+  data: Prisma.schedulesCreateManyUsersInput | Prisma.schedulesCreateManyUsersInput[]
+  skipDuplicates?: boolean
+}
+
+export type schedulesUpsertWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.schedulesWhereUniqueInput
+  update: Prisma.XOR<Prisma.schedulesUpdateWithoutUsersInput, Prisma.schedulesUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.schedulesCreateWithoutUsersInput, Prisma.schedulesUncheckedCreateWithoutUsersInput>
+}
+
+export type schedulesUpdateWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.schedulesWhereUniqueInput
+  data: Prisma.XOR<Prisma.schedulesUpdateWithoutUsersInput, Prisma.schedulesUncheckedUpdateWithoutUsersInput>
+}
+
+export type schedulesUpdateManyWithWhereWithoutUsersInput = {
+  where: Prisma.schedulesScalarWhereInput
+  data: Prisma.XOR<Prisma.schedulesUpdateManyMutationInput, Prisma.schedulesUncheckedUpdateManyWithoutUsersInput>
+}
+
 export type schedulesCreateManyPlacesInput = {
   id?: bigint | number
+  user_id?: string | null
   created_at?: Date | string
   appointment_date: Date | string
   df_guarantee_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -622,11 +752,13 @@ export type schedulesUpdateWithoutPlacesInput = {
   df_guarantee_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   df_percent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   remark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  users?: Prisma.usersUpdateOneWithoutSchedulesNestedInput
   works?: Prisma.worksUpdateManyWithoutSchedulesNestedInput
 }
 
 export type schedulesUncheckedUpdateWithoutPlacesInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   appointment_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   df_guarantee_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -637,7 +769,50 @@ export type schedulesUncheckedUpdateWithoutPlacesInput = {
 
 export type schedulesUncheckedUpdateManyWithoutPlacesInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  appointment_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  df_guarantee_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_percent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type schedulesCreateManyUsersInput = {
+  id?: bigint | number
+  created_at?: Date | string
+  place_id: bigint | number
+  appointment_date: Date | string
+  df_guarantee_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_percent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remark?: string | null
+}
+
+export type schedulesUpdateWithoutUsersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  appointment_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  df_guarantee_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_percent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  places?: Prisma.placesUpdateOneRequiredWithoutSchedulesNestedInput
+  works?: Prisma.worksUpdateManyWithoutSchedulesNestedInput
+}
+
+export type schedulesUncheckedUpdateWithoutUsersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  place_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  appointment_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  df_guarantee_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_percent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  works?: Prisma.worksUncheckedUpdateManyWithoutSchedulesNestedInput
+}
+
+export type schedulesUncheckedUpdateManyWithoutUsersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  place_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   appointment_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   df_guarantee_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   df_percent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -677,6 +852,7 @@ export type SchedulesCountOutputTypeCountWorksArgs<ExtArgs extends runtime.Types
 
 export type schedulesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  user_id?: boolean
   created_at?: boolean
   place_id?: boolean
   appointment_date?: boolean
@@ -684,12 +860,14 @@ export type schedulesSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   df_percent?: boolean
   remark?: boolean
   places?: boolean | Prisma.placesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.schedules$usersArgs<ExtArgs>
   works?: boolean | Prisma.schedules$worksArgs<ExtArgs>
   _count?: boolean | Prisma.SchedulesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["schedules"]>
 
 export type schedulesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  user_id?: boolean
   created_at?: boolean
   place_id?: boolean
   appointment_date?: boolean
@@ -697,10 +875,12 @@ export type schedulesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   df_percent?: boolean
   remark?: boolean
   places?: boolean | Prisma.placesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.schedules$usersArgs<ExtArgs>
 }, ExtArgs["result"]["schedules"]>
 
 export type schedulesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  user_id?: boolean
   created_at?: boolean
   place_id?: boolean
   appointment_date?: boolean
@@ -708,10 +888,12 @@ export type schedulesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   df_percent?: boolean
   remark?: boolean
   places?: boolean | Prisma.placesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.schedules$usersArgs<ExtArgs>
 }, ExtArgs["result"]["schedules"]>
 
 export type schedulesSelectScalar = {
   id?: boolean
+  user_id?: boolean
   created_at?: boolean
   place_id?: boolean
   appointment_date?: boolean
@@ -720,27 +902,32 @@ export type schedulesSelectScalar = {
   remark?: boolean
 }
 
-export type schedulesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "created_at" | "place_id" | "appointment_date" | "df_guarantee_amount" | "df_percent" | "remark", ExtArgs["result"]["schedules"]>
+export type schedulesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "created_at" | "place_id" | "appointment_date" | "df_guarantee_amount" | "df_percent" | "remark", ExtArgs["result"]["schedules"]>
 export type schedulesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   places?: boolean | Prisma.placesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.schedules$usersArgs<ExtArgs>
   works?: boolean | Prisma.schedules$worksArgs<ExtArgs>
   _count?: boolean | Prisma.SchedulesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type schedulesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   places?: boolean | Prisma.placesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.schedules$usersArgs<ExtArgs>
 }
 export type schedulesIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   places?: boolean | Prisma.placesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.schedules$usersArgs<ExtArgs>
 }
 
 export type $schedulesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "schedules"
   objects: {
     places: Prisma.$placesPayload<ExtArgs>
+    users: Prisma.$usersPayload<ExtArgs> | null
     works: Prisma.$worksPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
+    user_id: string | null
     created_at: Date
     place_id: bigint
     appointment_date: Date
@@ -1142,6 +1329,7 @@ readonly fields: schedulesFieldRefs;
 export interface Prisma__schedulesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   places<T extends Prisma.placesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.placesDefaultArgs<ExtArgs>>): Prisma.Prisma__placesClient<runtime.Types.Result.GetResult<Prisma.$placesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  users<T extends Prisma.schedules$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.schedules$usersArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   works<T extends Prisma.schedules$worksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.schedules$worksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$worksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1173,6 +1361,7 @@ export interface Prisma__schedulesClient<T, Null = never, ExtArgs extends runtim
  */
 export interface schedulesFieldRefs {
   readonly id: Prisma.FieldRef<"schedules", 'BigInt'>
+  readonly user_id: Prisma.FieldRef<"schedules", 'String'>
   readonly created_at: Prisma.FieldRef<"schedules", 'DateTime'>
   readonly place_id: Prisma.FieldRef<"schedules", 'BigInt'>
   readonly appointment_date: Prisma.FieldRef<"schedules", 'DateTime'>
@@ -1572,6 +1761,25 @@ export type schedulesDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many schedules to delete.
    */
   limit?: number
+}
+
+/**
+ * schedules.users
+ */
+export type schedules$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the users
+   */
+  select?: Prisma.usersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the users
+   */
+  omit?: Prisma.usersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+  where?: Prisma.usersWhereInput
 }
 
 /**
