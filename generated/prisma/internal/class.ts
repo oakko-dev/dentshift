@@ -17,8 +17,8 @@ import type * as Prisma from "./prismaNamespace"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.1.0",
-  "engineVersion": "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba",
+  "clientVersion": "7.0.1",
+  "engineVersion": "f09f2815f091dbba658cdcd2264306d88bb5bda6",
   "activeProvider": "postgresql",
   "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel banks {\n  id             BigInt  @id @default(autoincrement())\n  account_name   String\n  account_number String\n  works          works[]\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel healthcheck {\n  id         BigInt    @id @default(autoincrement())\n  name       String?   @db.VarChar\n  count      BigInt?\n  updated_at DateTime? @db.Timestamptz(6)\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel places {\n  id         BigInt      @id @default(autoincrement())\n  name       String      @db.VarChar\n  branch     String      @db.VarChar\n  location   String?\n  tag        String?\n  start_time DateTime    @db.Time(6)\n  end_time   DateTime    @db.Time(6)\n  tax_type   String?     @db.VarChar\n  remark     String?\n  schedules  schedules[]\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel schedules {\n  id                  BigInt   @id @default(autoincrement())\n  user_id             String?  @db.Uuid\n  created_at          DateTime @default(now()) @db.Timestamptz(6)\n  place_id            BigInt\n  appointment_date    DateTime @db.Date\n  df_guarantee_amount Decimal  @db.Decimal\n  df_percent          Decimal  @db.Decimal\n  remark              String?\n  places              places   @relation(fields: [place_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n  users               users?   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n  works               works[]\n}\n\n/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.\nmodel works {\n  id                    BigInt    @id @default(autoincrement())\n  created_at            DateTime  @default(now()) @db.Timestamptz(6)\n  schedule_id           BigInt\n  total_amount          Decimal   @db.Decimal\n  df_amount             Decimal   @db.Decimal\n  bank_id               BigInt?\n  forecast_payment_date DateTime  @db.Date\n  remark                String?\n  deposit_date          DateTime? @db.Date\n  deposit_amount        Decimal?  @db.Decimal\n  banks                 banks?    @relation(fields: [bank_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n  schedules             schedules @relation(fields: [schedule_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n}\n\nmodel users {\n  id            String  @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  name          String?\n  firstname     String?\n  lastname      String?\n  email         String  @unique\n  emailVerified Boolean @default(false)\n  password      String?\n  phone_number  String?\n  image         String?\n\n  createdAt DateTime @default(now()) @map(\"created_at\") @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @map(\"updated_at\") @db.Timestamptz(6)\n\n  // A user can have many push subscriptions\n  subscriptions subscriptions[]\n  schedules     schedules[]\n  sessions      sessions[]\n  accounts      accounts[]\n\n  @@map(\"users\")\n}\n\nmodel sessions {\n  id        String   @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  userId    String   @map(\"user_id\") @db.Uuid\n  expiresAt DateTime @map(\"expires_at\") @db.Timestamptz(6)\n  token     String   @unique\n  ipAddress String?  @map(\"ip_address\")\n  userAgent String?  @map(\"user_agent\")\n\n  createdAt DateTime @default(now()) @map(\"created_at\") @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @map(\"updated_at\") @db.Timestamptz(6)\n\n  user users @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map(\"sessions\")\n}\n\nmodel accounts {\n  id           String    @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  userId       String    @map(\"user_id\") @db.Uuid\n  accountId    String    @map(\"account_id\")\n  providerId   String    @map(\"provider_id\")\n  accessToken  String?   @map(\"access_token\")\n  refreshToken String?   @map(\"refresh_token\")\n  idToken      String?   @map(\"id_token\")\n  expiresAt    DateTime? @map(\"expires_at\") @db.Timestamptz(6)\n  password     String?\n\n  createdAt DateTime @default(now()) @map(\"created_at\") @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @map(\"updated_at\") @db.Timestamptz(6)\n\n  user users @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map(\"accounts\")\n}\n\nmodel verifications {\n  id         String   @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  identifier String\n  value      String\n  expiresAt  DateTime @map(\"expires_at\") @db.Timestamptz(6)\n\n  createdAt DateTime @default(now()) @map(\"created_at\") @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @map(\"updated_at\") @db.Timestamptz(6)\n\n  @@map(\"verifications\")\n}\n\nmodel subscriptions {\n  id      String @id @default(dbgenerated(\"gen_random_uuid()\")) @db.Uuid\n  user_id String @db.Uuid\n\n  // The 'endpoint' is the unique ID provided by the browser push service\n  endpoint String @unique\n\n  // These keys are required to encrypt the payload\n  p256dh String\n  auth   String\n\n  created_at DateTime @default(now()) @db.Timestamptz(6)\n\n  users users @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)\n\n  @@index([user_id])\n}\n",
   "runtimeDataModel": {
@@ -62,7 +62,7 @@ export interface PrismaClientConstructor {
    * const banks = await prisma.banks.findMany()
    * ```
    * 
-   * Read more in our [docs](https://pris.ly/d/client).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
    */
 
   new <
@@ -84,7 +84,7 @@ export interface PrismaClientConstructor {
  * const banks = await prisma.banks.findMany()
  * ```
  * 
- * Read more in our [docs](https://pris.ly/d/client).
+ * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
  */
 
 export interface PrismaClient<
@@ -113,7 +113,7 @@ export interface PrismaClient<
    * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://pris.ly/d/raw-queries).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -125,7 +125,7 @@ export interface PrismaClient<
    * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://pris.ly/d/raw-queries).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -136,7 +136,7 @@ export interface PrismaClient<
    * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://pris.ly/d/raw-queries).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
 
@@ -148,7 +148,7 @@ export interface PrismaClient<
    * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://pris.ly/d/raw-queries).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
 
