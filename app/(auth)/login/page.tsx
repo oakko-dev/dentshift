@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Icon } from "@iconify/react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
@@ -26,6 +26,7 @@ export default function LoginPage() {
 	const updateLoading = useLoadingStore(state => state.updateLoading)
 	const router = useRouter()
 	const [isLoading, setIsLoading] = useState(false)
+	const [isPWA, setIsPWA] = useState(false)
 
 	const {
 		register,
@@ -34,7 +35,7 @@ export default function LoginPage() {
 	} = useForm<LoginFormData>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
-			email: "admin@savvtac.co",
+			email: "daparindada@gmail.com",
 			password: "P@ssw0rd",
 		},
 	})
@@ -94,6 +95,19 @@ export default function LoginPage() {
 		}
 	}
 
+	useEffect(() => {
+		// Check if running as PWA
+		const checkPWA = () => {
+			if (typeof window === "undefined")
+				return
+			const isInStandaloneMode = window.matchMedia("(display-mode: standalone)").matches
+			const isIOSPWA = (window.navigator as any).standalone === true
+			setIsPWA(isInStandaloneMode || isIOSPWA)
+		}
+
+		checkPWA()
+	}, [])
+
 	return (
 		<div className="flex min-h-screen items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 p-4">
 			<div className="w-full max-w-md space-y-8 rounded-2xl bg-white p-8 shadow-2xl">
@@ -151,27 +165,31 @@ export default function LoginPage() {
 					</Button>
 				</form>
 
-				<div className="relative">
-					<div className="absolute inset-0 flex items-center">
-						<span className="w-full border-t" />
-					</div>
-					<div className="relative flex justify-center text-xs uppercase">
-						<span className="text-muted-foreground bg-white px-2">
-							Or continue with
-						</span>
-					</div>
-				</div>
+				{!isPWA && (
+					<>
+						<div className="relative">
+							<div className="absolute inset-0 flex items-center">
+								<span className="w-full border-t" />
+							</div>
+							<div className="relative flex justify-center text-xs uppercase">
+								<span className="text-muted-foreground bg-white px-2">
+									Or continue with
+								</span>
+							</div>
+						</div>
 
-				<Button
-					variant="outline"
-					type="button"
-					disabled={isLoading}
-					onClick={handleLineLogin}
-					className="w-full"
-				>
-					<Icon icon="simple-icons:line" className="mr-2 size-5" style={{ color: "#00B900" }} />
-					Sign in with LINE
-				</Button>
+						<Button
+							variant="outline"
+							type="button"
+							disabled={isLoading}
+							onClick={handleLineLogin}
+							className="w-full"
+						>
+							<Icon icon="simple-icons:line" className="mr-2 size-5" style={{ color: "#00B900" }} />
+							Sign in with LINE
+						</Button>
+					</>
+				)}
 			</div>
 		</div>
 	)

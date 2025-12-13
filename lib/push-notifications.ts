@@ -127,4 +127,3 @@ export async function sendNotificationToAllUsers(payload: NotificationPayload) {
 		return { success: false, message: "Failed to send notifications" }
 	}
 }
-
