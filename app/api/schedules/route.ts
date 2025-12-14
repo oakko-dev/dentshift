@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
 					url: "/schedules",
 					scheduleId: Number(newSchedule.id),
 				},
-			}).catch(error => {
+			}).catch((error) => {
 				// Don't fail the request if notification fails
 				console.error("Failed to send notification:", error)
 			})

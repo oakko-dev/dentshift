@@ -92,6 +92,9 @@ importers:
       framer-motion:
         specifier: ^12.23.24
         version: 12.23.24(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      holy-loader:
+        specifier: ^2.3.14
+        version: 2.3.14(react@19.2.0)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -2959,6 +2962,11 @@ packages:
 
   hermes-parser@0.25.1:
     resolution: {integrity: sha512-6pEjquH3rqaI6cYAXYPcz9MS4rY6R4ngRgrgfDshRptUZIc3lw0MCIJIGDj9++mfySOuPTHB4nrSW99BCvOPIA==}
+
+  holy-loader@2.3.14:
+    resolution: {integrity: sha512-V7z6jXKy/CZfZY6EAVxMFGbLfE7/TLhYWgpMhODvZPpAL2JTkfjmZhYd0TiZIdZiychtCL5tA5sRN0MUwjRNjA==}
+    peerDependencies:
+      react: '>= 16.0.0'
 
   hono@4.7.10:
     resolution: {integrity: sha512-QkACju9MiN59CKSY5JsGZCYmPZkA6sIW6OFCUp7qDjZu6S6KHtJHhAc9Uy9mV9F8PJ1/HQ3ybZF2yjCa/73fvQ==}
@@ -7472,6 +7480,10 @@ snapshots:
   hermes-parser@0.25.1:
     dependencies:
       hermes-estree: 0.25.1
+
+  holy-loader@2.3.14(react@19.2.0):
+    dependencies:
+      react: 19.2.0
 
   hono@4.7.10: {}
 
