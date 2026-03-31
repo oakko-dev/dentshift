@@ -16,8 +16,12 @@ export async function GET(request: NextRequest) {
 		// Initialize data for last 6 months
 		const chartData = []
 		for (let i = 5; i >= 0; i--) {
-			const date = new Date()
-			date.setMonth(currentDate.getMonth() - i)
+			// Use day 1 so month arithmetic never overflows (e.g. Mar 31 − 1 month must not become Mar 2).
+			const date = new Date(
+				currentDate.getFullYear(),
+				currentDate.getMonth() - i,
+				1,
+			)
 			const monthIndex = date.getMonth()
 			const year = date.getFullYear()
 
