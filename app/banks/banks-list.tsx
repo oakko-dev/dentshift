@@ -2,12 +2,14 @@
 
 import { Icon } from "@iconify/react"
 
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
+import ListPagination from "@/components/common/list-pagination"
 import Loading from "@/components/common/loading"
 import { swal } from "@/components/common/sweetalert"
 import { Button } from "@/components/ui/button"
 import { useBankLists, useDeleteBank } from "@/lib/react-query/banks"
 import { useLoadingStore } from "@/providers/loading-store-provider"
+import { getPageSize } from "@/utils/helpers"
 
 interface BanksListProps {
 	onEdit: (id: number) => void
@@ -15,61 +17,20 @@ interface BanksListProps {
 
 export default function BanksList({ onEdit }: BanksListProps) {
 	const [page, setPage] = useState(0)
-	const [pageSize] = useState(10)
-	const [allBanks, setAllBanks] = useState<any[]>([])
-	const [lastDataTimestamp, setLastDataTimestamp] = useState<number>(0)
-	const observerTarget = useRef<HTMLDivElement>(null)
+	const pageSize = getPageSize()
 
 	const updateLoading = useLoadingStore(state => state.updateLoading)
 	const deleteBank = useDeleteBank()
 
-	const { data, isLoading, isError, error, isFetching, dataUpdatedAt } = useBankLists({
+	const { data, isLoading, isError, error, isFetching } = useBankLists({
 		page,
 		pageSize,
 	})
 
-	// Reset accumulated data when query is refetched from page 0
-	useEffect(() => {
-		if (page === 0 && data?.data && dataUpdatedAt > lastDataTimestamp) {
-			// This is a fresh fetch from page 0, reset everything
-			setAllBanks(data.data)
-			setLastDataTimestamp(dataUpdatedAt)
-		}
-		else if (page > 0 && data?.data) {
-			// Accumulate data as we load more pages
-			setAllBanks((prev) => {
-				const newIds = data.data.map(b => b.id)
-				const existingIds = new Set(prev.map(b => b.id))
-				const newItems = data.data.filter(b => !existingIds.has(b.id))
-				return [...prev, ...newItems]
-			})
-		}
-	}, [data, page, dataUpdatedAt, lastDataTimestamp])
+	const banks = data?.data ?? []
+	const total = data?.total ?? 0
 
-	// Intersection Observer for infinite scroll
-	useEffect(() => {
-		const currentObserverTarget = observerTarget.current
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (entries[0].isIntersecting && !isFetching && data?.data.length === pageSize) {
-					setPage(prev => prev + 1)
-				}
-			},
-			{ threshold: 0.1 },
-		)
-
-		if (currentObserverTarget) {
-			observer.observe(currentObserverTarget)
-		}
-
-		return () => {
-			if (currentObserverTarget) {
-				observer.unobserve(currentObserverTarget)
-			}
-		}
-	}, [isFetching, data?.data.length, pageSize])
-
-	if (isLoading && page === 0) {
+	if (isLoading) {
 		return (
 			<div className="flex items-center justify-center">
 				<Loading />
@@ -102,9 +63,9 @@ export default function BanksList({ onEdit }: BanksListProps) {
 			updateLoading(true)
 			try {
 				await deleteBank.mutateAsync(id)
-				// Reset to page 0 and clear local state to trigger refetch
-				setPage(0)
-				setAllBanks([])
+				if (banks.length === 1 && page > 0) {
+					setPage(page - 1)
+				}
 				updateLoading(false)
 				swal.fire({
 					title: "ลบสำเร็จ",
@@ -126,7 +87,7 @@ export default function BanksList({ onEdit }: BanksListProps) {
 	return (
 		<div className="space-y-4">
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-				{allBanks.map(bank => (
+				{banks.map(bank => (
 					<div
 						key={bank.id}
 						className="bg-card relative rounded-xl border p-6 shadow-sm transition-shadow hover:shadow-md"
@@ -178,7 +139,7 @@ export default function BanksList({ onEdit }: BanksListProps) {
 			</div>
 
 			{/* Empty state */}
-			{allBanks.length === 0 && !isLoading && (
+			{banks.length === 0 && !isLoading && (
 				<div className="flex flex-col items-center justify-center py-12">
 					<Icon icon="lucide:building-2" className="text-muted-foreground mb-4 size-16" />
 					<p className="text-muted-foreground text-lg">ยังไม่มีบัญชีธนาคาร</p>
@@ -186,19 +147,13 @@ export default function BanksList({ onEdit }: BanksListProps) {
 				</div>
 			)}
 
-			{/* Loading indicator for infinite scroll */}
-			<div ref={observerTarget} className="flex justify-center py-4">
-				{isFetching && (
-					<div className="text-muted-foreground flex items-center gap-2 text-sm">
-						<Loading />
-					</div>
-				)}
-				{!isFetching && data?.data && data.data.length !== 0 && data.data.length < pageSize && (
-					<div className="text-muted-foreground text-sm">
-						แสดงครบทั้งหมดแล้ว
-					</div>
-				)}
-			</div>
+			<ListPagination
+				page={page}
+				pageSize={pageSize}
+				total={total}
+				onPageChange={setPage}
+				disabled={isFetching}
+			/>
 		</div>
 	)
 }

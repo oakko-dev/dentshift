@@ -1,20 +1,24 @@
 import type { PaginatedResponse } from "@/types/global"
 import type { CreateWorkInput, UpdateWorkInput, WorkData, WorkDataList } from "@/types/works"
 
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export function useWorkLists(params: {
 	page: number
 	pageSize: number
 	sortBy?: string
 	sortOrder?: string
+	includeDeposited?: boolean
 }) {
+	const includeDeposited = params.includeDeposited ?? true
+
 	return useQuery<PaginatedResponse<WorkDataList>, Error>({
-		queryKey: ["workListQuery", params.page, params.pageSize, params.sortBy, params.sortOrder],
+		queryKey: ["workListQuery", params.page, params.pageSize, params.sortBy, params.sortOrder, includeDeposited],
 		queryFn: async () => {
 			const queryParams = new URLSearchParams({
 				page: params.page.toString(),
 				pageSize: params.pageSize.toString(),
+				includeDeposited: includeDeposited.toString(),
 			})
 
 			if (params.sortBy) {
@@ -32,46 +36,6 @@ export function useWorkLists(params: {
 
 			return response.json()
 		},
-	})
-}
-
-export function useInfiniteWorkLists(params: {
-	pageSize: number
-	sortBy?: string
-	sortOrder?: string
-}) {
-	return useInfiniteQuery({
-		queryKey: ["workInfiniteListQuery", params.pageSize, params.sortBy, params.sortOrder],
-		queryFn: async ({ pageParam }: { pageParam: number }) => {
-			const queryParams = new URLSearchParams({
-				page: pageParam.toString(),
-				pageSize: params.pageSize.toString(),
-			})
-
-			if (params.sortBy) {
-				queryParams.append("sortBy", params.sortBy)
-			}
-			if (params.sortOrder) {
-				queryParams.append("sortOrder", params.sortOrder)
-			}
-
-			const response = await fetch(`/api/works?${queryParams.toString()}`)
-
-			if (!response.ok) {
-				throw new Error("Failed to fetch works")
-			}
-
-			return response.json() as Promise<PaginatedResponse<WorkDataList>>
-		},
-		getNextPageParam: (lastPage, allPages) => {
-			// If the last page has less items than pageSize, there are no more pages
-			if (lastPage.data.length < params.pageSize) {
-				return undefined
-			}
-			// Return the next page number
-			return allPages.length
-		},
-		initialPageParam: 0,
 	})
 }
 
@@ -115,7 +79,6 @@ export function useCreateWork() {
 		onSuccess: () => {
 			// Invalidate and refetch work lists
 			queryClient.invalidateQueries({ queryKey: ["workListQuery"] })
-			queryClient.invalidateQueries({ queryKey: ["workInfiniteListQuery"] })
 		},
 	})
 }
@@ -144,7 +107,6 @@ export function useUpdateWork() {
 		onSuccess: (_, variables) => {
 			// Invalidate and refetch work lists
 			queryClient.invalidateQueries({ queryKey: ["workListQuery"] })
-			queryClient.invalidateQueries({ queryKey: ["workInfiniteListQuery"] })
 		},
 	})
 }
@@ -168,7 +130,6 @@ export function useDeleteWork() {
 		onSuccess: () => {
 			// Invalidate and refetch work lists
 			queryClient.invalidateQueries({ queryKey: ["workListQuery"] })
-			queryClient.invalidateQueries({ queryKey: ["workInfiniteListQuery"] })
 		},
 	})
 }

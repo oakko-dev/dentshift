@@ -2,12 +2,13 @@
 
 import { Icon } from "@iconify/react"
 
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
+import ListPagination from "@/components/common/list-pagination"
 import Loading from "@/components/common/loading"
 import { swal } from "@/components/common/sweetalert"
 import { Button } from "@/components/ui/button"
-import { useDeleteSchedule, useInfiniteScheduleLists } from "@/lib/react-query/schedules"
+import { useDeleteSchedule, useScheduleLists } from "@/lib/react-query/schedules"
 import { useLoadingStore } from "@/providers/loading-store-provider"
 import { convertDateToThai, getPageSize } from "@/utils/helpers"
 
@@ -18,10 +19,10 @@ interface SchedulesListProps {
 export default function SchedulesList({ onEdit }: SchedulesListProps) {
 	const pageSize = getPageSize()
 	const updateLoading = useLoadingStore(state => state.updateLoading)
+	const [page, setPage] = useState(0)
 	const [sortBy, setSortBy] = useState<string>("appointment_date")
 	const [sortOrder, setSortOrder] = useState<string>("asc")
 	const [showPastAppointments, setShowPastAppointments] = useState<boolean>(false)
-	const observerTarget = useRef<HTMLDivElement>(null)
 
 	const {
 		data,
@@ -29,42 +30,17 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 		isError,
 		error,
 		isFetching,
-		fetchNextPage,
-		hasNextPage,
-		isFetchingNextPage,
-	} = useInfiniteScheduleLists({
+	} = useScheduleLists({
+		page,
 		pageSize,
 		sortBy,
 		sortOrder,
+		includePast: showPastAppointments,
 	})
 
 	const deleteScheduleMutation = useDeleteSchedule()
-
-	// Flatten all pages into a single array
-	const allSchedules = data?.pages.flatMap(page => page.data) ?? []
-
-	// Intersection Observer for infinite scroll
-	useEffect(() => {
-		const currentObserverTarget = observerTarget.current
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-					fetchNextPage()
-				}
-			},
-			{ threshold: 0.1 },
-		)
-
-		if (currentObserverTarget) {
-			observer.observe(currentObserverTarget)
-		}
-
-		return () => {
-			if (currentObserverTarget) {
-				observer.unobserve(currentObserverTarget)
-			}
-		}
-	}, [fetchNextPage, hasNextPage, isFetchingNextPage])
+	const schedules = data?.data ?? []
+	const total = data?.total ?? 0
 
 	if (isLoading) {
 		return (
@@ -86,12 +62,11 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 	}
 
 	const handleSortChange = (field: string) => {
+		setPage(0)
 		if (sortBy === field) {
-			// Toggle sort order if clicking the same field
 			setSortOrder(prev => prev === "desc" ? "asc" : "desc")
 		}
 		else {
-			// Set new field with default desc order
 			setSortBy(field)
 			setSortOrder("desc")
 		}
@@ -114,6 +89,9 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 				deleteScheduleMutation.mutate(id, {
 					onSuccess: () => {
 						updateLoading(false)
+						if (schedules.length === 1 && page > 0) {
+							setPage(page - 1)
+						}
 						toast.success("ลบนัดหมายสำเร็จ")
 					},
 					onError: (error) => {
@@ -170,7 +148,10 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 				<Button
 					variant={showPastAppointments ? "outline" : "default"}
 					size="sm"
-					onClick={() => setShowPastAppointments(prev => !prev)}
+					onClick={() => {
+						setPage(0)
+						setShowPastAppointments(prev => !prev)
+					}}
 					className="gap-2"
 				>
 					<Icon
@@ -182,17 +163,7 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 			</div>
 
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-				{allSchedules
-					.filter((schedule) => {
-						if (showPastAppointments) {
-							return true
-						}
-						const appointmentDate = new Date(schedule.appointment_date)
-						const today = new Date()
-						today.setHours(0, 0, 0, 0)
-						appointmentDate.setHours(0, 0, 0, 0)
-						return appointmentDate >= today
-					})
+				{schedules
 					.map((schedule) => {
 						const appointmentDate = new Date(schedule.appointment_date)
 						const today = new Date()
@@ -294,19 +265,13 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 					})}
 			</div>
 
-			{/* Loading indicator for infinite scroll */}
-			<div ref={observerTarget} className="flex justify-center py-4">
-				{isFetchingNextPage && (
-					<div className="text-muted-foreground flex items-center gap-2 text-sm">
-						<Loading />
-					</div>
-				)}
-				{!hasNextPage && allSchedules.length > 0 && (
-					<div className="text-muted-foreground text-sm">
-						แสดงครบทั้งหมดแล้ว
-					</div>
-				)}
-			</div>
+			<ListPagination
+				page={page}
+				pageSize={pageSize}
+				total={total}
+				onPageChange={setPage}
+				disabled={isFetching}
+			/>
 		</div>
 	)
 }

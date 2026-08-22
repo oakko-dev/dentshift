@@ -2,12 +2,13 @@
 
 import { Icon } from "@iconify/react"
 
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
+import ListPagination from "@/components/common/list-pagination"
 import Loading from "@/components/common/loading"
 import { swal } from "@/components/common/sweetalert"
 import { Button } from "@/components/ui/button"
-import { useDeleteWork, useInfiniteWorkLists } from "@/lib/react-query/works"
+import { useDeleteWork, useWorkLists } from "@/lib/react-query/works"
 import { useLoadingStore } from "@/providers/loading-store-provider"
 import { convertDateToThai, getPageSize } from "@/utils/helpers"
 
@@ -19,10 +20,10 @@ interface WorksListProps {
 export default function WorksList({ onEdit, onDeposit }: WorksListProps) {
 	const pageSize = getPageSize()
 	const updateLoading = useLoadingStore(state => state.updateLoading)
+	const [page, setPage] = useState(0)
 	const [sortBy, setSortBy] = useState<string>("appointment_date")
 	const [sortOrder, setSortOrder] = useState<string>("desc")
 	const [showCompleted, setShowCompleted] = useState<boolean>(true)
-	const observerTarget = useRef<HTMLDivElement>(null)
 
 	const {
 		data,
@@ -30,42 +31,17 @@ export default function WorksList({ onEdit, onDeposit }: WorksListProps) {
 		isError,
 		error,
 		isFetching,
-		fetchNextPage,
-		hasNextPage,
-		isFetchingNextPage,
-	} = useInfiniteWorkLists({
+	} = useWorkLists({
+		page,
 		pageSize,
 		sortBy,
 		sortOrder,
+		includeDeposited: !showCompleted,
 	})
 
 	const deleteWorkMutation = useDeleteWork()
-
-	// Flatten all pages into a single array
-	const allWorks = data?.pages.flatMap(page => page.data) ?? []
-
-	// Intersection Observer for infinite scroll
-	useEffect(() => {
-		const currentObserverTarget = observerTarget.current
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-					fetchNextPage()
-				}
-			},
-			{ threshold: 0.1 },
-		)
-
-		if (currentObserverTarget) {
-			observer.observe(currentObserverTarget)
-		}
-
-		return () => {
-			if (currentObserverTarget) {
-				observer.unobserve(currentObserverTarget)
-			}
-		}
-	}, [fetchNextPage, hasNextPage, isFetchingNextPage])
+	const works = data?.data ?? []
+	const total = data?.total ?? 0
 
 	if (isLoading) {
 		return (
@@ -87,12 +63,11 @@ export default function WorksList({ onEdit, onDeposit }: WorksListProps) {
 	}
 
 	const handleSortChange = (field: string) => {
+		setPage(0)
 		if (sortBy === field) {
-			// Toggle sort order if clicking the same field
 			setSortOrder(prev => prev === "desc" ? "asc" : "desc")
 		}
 		else {
-			// Set new field with default desc order
 			setSortBy(field)
 			setSortOrder("asc")
 		}
@@ -115,6 +90,9 @@ export default function WorksList({ onEdit, onDeposit }: WorksListProps) {
 				deleteWorkMutation.mutate(id, {
 					onSuccess: () => {
 						updateLoading(false)
+						if (works.length === 1 && page > 0) {
+							setPage(page - 1)
+						}
 						toast.success("ลบบันทึกการทำงานสำเร็จ")
 					},
 					onError: (error) => {
@@ -171,7 +149,10 @@ export default function WorksList({ onEdit, onDeposit }: WorksListProps) {
 				<Button
 					variant={showCompleted ? "default" : "outline"}
 					size="sm"
-					onClick={() => setShowCompleted(prev => !prev)}
+					onClick={() => {
+						setPage(0)
+						setShowCompleted(prev => !prev)
+					}}
 					className="gap-2"
 				>
 					<Icon
@@ -183,13 +164,7 @@ export default function WorksList({ onEdit, onDeposit }: WorksListProps) {
 			</div>
 
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-				{allWorks
-					.filter((work) => {
-						if (!showCompleted) {
-							return true
-						}
-						return !work.deposit_date
-					})
+				{works
 					.map((work) => {
 						const isCompleted = !!work.deposit_date
 						const forecastDate = new Date(work.forecast_payment_date)
@@ -347,19 +322,13 @@ export default function WorksList({ onEdit, onDeposit }: WorksListProps) {
 					})}
 			</div>
 
-			{/* Loading indicator for infinite scroll */}
-			<div ref={observerTarget} className="flex justify-center py-4">
-				{isFetchingNextPage && (
-					<div className="text-muted-foreground flex items-center gap-2 text-sm">
-						<Loading />
-					</div>
-				)}
-				{!hasNextPage && allWorks.length > 0 && (
-					<div className="text-muted-foreground text-sm">
-						แสดงครบทั้งหมดแล้ว
-					</div>
-				)}
-			</div>
+			<ListPagination
+				page={page}
+				pageSize={pageSize}
+				total={total}
+				onPageChange={setPage}
+				disabled={isFetching}
+			/>
 		</div>
 	)
 }

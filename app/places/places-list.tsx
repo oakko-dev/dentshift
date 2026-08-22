@@ -3,12 +3,14 @@
 import { Icon } from "@iconify/react"
 import Link from "next/link"
 
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
+import ListPagination from "@/components/common/list-pagination"
 import Loading from "@/components/common/loading"
 import { swal } from "@/components/common/sweetalert"
 import { Button } from "@/components/ui/button"
 import { useDeletePlace, usePlaceLists } from "@/lib/react-query/places"
 import { useLoadingStore } from "@/providers/loading-store-provider"
+import { getPageSize } from "@/utils/helpers"
 
 interface PlacesListProps {
 	onEdit: (id: number) => void
@@ -16,61 +18,20 @@ interface PlacesListProps {
 
 export default function PlacesList({ onEdit }: PlacesListProps) {
 	const [page, setPage] = useState(0)
-	const [pageSize] = useState(10)
-	const [allPlaces, setAllPlaces] = useState<any[]>([])
-	const [lastDataTimestamp, setLastDataTimestamp] = useState<number>(0)
-	const observerTarget = useRef<HTMLDivElement>(null)
+	const pageSize = getPageSize()
 
 	const updateLoading = useLoadingStore(state => state.updateLoading)
 	const deletePlace = useDeletePlace()
 
-	const { data, isLoading, isError, error, isFetching, dataUpdatedAt } = usePlaceLists({
+	const { data, isLoading, isError, error, isFetching } = usePlaceLists({
 		page,
 		pageSize,
 	})
 
-	// Reset accumulated data when query is refetched from page 0
-	useEffect(() => {
-		if (page === 0 && data?.data && dataUpdatedAt > lastDataTimestamp) {
-			// This is a fresh fetch from page 0, reset everything
-			setAllPlaces(data.data)
-			setLastDataTimestamp(dataUpdatedAt)
-		}
-		else if (page > 0 && data?.data) {
-			// Accumulate data as we load more pages
-			setAllPlaces((prev) => {
-				const newIds = data.data.map(p => p.id)
-				const existingIds = new Set(prev.map(p => p.id))
-				const newItems = data.data.filter(p => !existingIds.has(p.id))
-				return [...prev, ...newItems]
-			})
-		}
-	}, [data, page, dataUpdatedAt, lastDataTimestamp])
+	const places = data?.data ?? []
+	const total = data?.total ?? 0
 
-	// Intersection Observer for infinite scroll
-	useEffect(() => {
-		const currentObserverTarget = observerTarget.current
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (entries[0].isIntersecting && !isFetching && data?.data.length === pageSize) {
-					setPage(prev => prev + 1)
-				}
-			},
-			{ threshold: 0.1 },
-		)
-
-		if (currentObserverTarget) {
-			observer.observe(currentObserverTarget)
-		}
-
-		return () => {
-			if (currentObserverTarget) {
-				observer.unobserve(currentObserverTarget)
-			}
-		}
-	}, [isFetching, data?.data.length, pageSize])
-
-	if (isLoading && page === 0) {
+	if (isLoading) {
 		return (
 			<div className="flex items-center justify-center">
 				<Loading />
@@ -103,9 +64,9 @@ export default function PlacesList({ onEdit }: PlacesListProps) {
 			updateLoading(true)
 			try {
 				await deletePlace.mutateAsync(id)
-				// Reset to page 0 and clear local state to trigger refetch
-				setPage(0)
-				setAllPlaces([])
+				if (places.length === 1 && page > 0) {
+					setPage(page - 1)
+				}
 				updateLoading(false)
 				swal.fire({
 					title: "ลบสำเร็จ",
@@ -127,7 +88,7 @@ export default function PlacesList({ onEdit }: PlacesListProps) {
 	return (
 		<div className="space-y-4">
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-				{allPlaces.map(place => (
+				{places.map(place => (
 					<div
 						key={place.id}
 						className="bg-card relative rounded-xl border p-4 shadow-sm transition-shadow hover:shadow-md"
@@ -207,21 +168,13 @@ export default function PlacesList({ onEdit }: PlacesListProps) {
 				))}
 			</div>
 
-			{/* Loading indicator for infinite scroll */}
-			<div ref={observerTarget} className="flex justify-center py-4">
-				{isFetching && (
-					<div className="text-muted-foreground flex items-center gap-2 text-sm">
-						{/* <Icon icon="lucide:loader-2" className="size-4 animate-spin" />
-						กำลังโหลดเพิ่มเติม... */}
-						<Loading />
-					</div>
-				)}
-				{!isFetching && data?.data && data.data.length !== 0 && data.data.length < pageSize && (
-					<div className="text-muted-foreground text-sm">
-						แสดงครบทั้งหมดแล้ว
-					</div>
-				)}
-			</div>
+			<ListPagination
+				page={page}
+				pageSize={pageSize}
+				total={total}
+				onPageChange={setPage}
+				disabled={isFetching}
+			/>
 		</div>
 	)
 }
