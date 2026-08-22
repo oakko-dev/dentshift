@@ -19,6 +19,8 @@ export async function GET(request: NextRequest) {
 		const sortOrder = searchParams.get("sortOrder") || "desc"
 		const includePastParam = searchParams.get("includePast")
 		const includePast = includePastParam !== "false"
+		const fromParam = searchParams.get("from")
+		const toParam = searchParams.get("to")
 		const userId = authResult.session.user.id
 
 		const allowedSortFields = ["created_at", "appointment_date"]
@@ -28,11 +30,33 @@ export async function GET(request: NextRequest) {
 		const startOfToday = new Date()
 		startOfToday.setHours(0, 0, 0, 0)
 
+		const fromDate = fromParam ? new Date(`${fromParam}T00:00:00.000Z`) : undefined
+		const toExclusive = toParam
+			? new Date(Date.UTC(
+					Number(toParam.slice(0, 4)),
+					Number(toParam.slice(5, 7)) - 1,
+					Number(toParam.slice(8, 10)) + 1,
+				))
+			: undefined
+
+		const gteCandidates = [
+			...(!includePast ? [startOfToday] : []),
+			...(fromDate && !Number.isNaN(fromDate.getTime()) ? [fromDate] : []),
+		]
+		const gte = gteCandidates.length > 0
+			? new Date(Math.max(...gteCandidates.map(date => date.getTime())))
+			: undefined
+
+		const appointmentDateFilter = {
+			...(gte ? { gte } : {}),
+			...(toExclusive && !Number.isNaN(toExclusive.getTime()) ? { lt: toExclusive } : {}),
+		}
+
 		const where = {
 			user_id: userId,
-			...(includePast
-				? {}
-				: { appointment_date: { gte: startOfToday } }),
+			...(Object.keys(appointmentDateFilter).length > 0
+				? { appointment_date: appointmentDateFilter }
+				: {}),
 		}
 
 		return await withDentist(userId, async (db) => {

@@ -145,9 +145,9 @@ export function AppSidebar() {
 													</div>
 													<div className="flex flex-col overflow-hidden">
 														<span className="truncate font-medium">
-															{
-																session.user.providerId != "credential" ? session.user.name : `${session.user.firstname} ${session.user.lastname}` || "User"
-															}
+															{session.user.firstname
+																? `${session.user.firstname} ${session.user.lastname ?? ""}`.trim()
+																: session.user.name || "User"}
 														</span>
 														<span className="text-muted-foreground truncate text-xs">
 															{session.user.email}

@@ -171,10 +171,23 @@ export default function Home() {
 		setSelectedYear(year)
 	}
 
-	// Fetch schedules for the calendar month
+	const calendarFrom = format(startOfMonth(calendarMonth), "yyyy-MM-dd")
+	const calendarTo = format(endOfMonth(calendarMonth), "yyyy-MM-dd")
+
 	const { data: schedulesData, isLoading: isLoadingSchedules } = useScheduleLists({
 		page: 0,
-		pageSize: 100, // Get enough to cover the month
+		pageSize: 50,
+		from: calendarFrom,
+		to: calendarTo,
+		includePast: true,
+	})
+
+	const { data: upcomingSchedulesData } = useScheduleLists({
+		page: 0,
+		pageSize: 2,
+		sortBy: "appointment_date",
+		sortOrder: "asc",
+		includePast: false,
 	})
 
 	// Create a map of dates with schedules
@@ -194,29 +207,28 @@ export default function Home() {
 
 	// Get today's work
 	const todayWork = useMemo(() => {
-		if (!schedulesData?.data)
-			return null
 		const today = format(new Date(), "yyyy-MM-dd")
-		return schedulesData.data.find(schedule => format(new Date(schedule.appointment_date), "yyyy-MM-dd") === today)
-	}, [schedulesData])
+		const fromCalendar = schedulesData?.data?.find(
+			schedule => format(new Date(schedule.appointment_date), "yyyy-MM-dd") === today,
+		)
+		if (fromCalendar)
+			return fromCalendar
+		return upcomingSchedulesData?.data?.find(
+			schedule => format(new Date(schedule.appointment_date), "yyyy-MM-dd") === today,
+		) ?? null
+	}, [schedulesData, upcomingSchedulesData])
 
 	// Get upcoming work (next scheduled work after today)
 	const upcomingWork = useMemo(() => {
-		if (!schedulesData?.data)
-			return null
 		const today = new Date()
 		today.setHours(0, 0, 0, 0)
 
-		const futureSchedules = schedulesData.data
-			.filter((schedule) => {
-				const scheduleDate = new Date(schedule.appointment_date)
-				scheduleDate.setHours(0, 0, 0, 0)
-				return scheduleDate > today
-			})
-			.sort((a, b) => new Date(a.appointment_date).getTime() - new Date(b.appointment_date).getTime())
-
-		return futureSchedules[0] || null
-	}, [schedulesData])
+		return upcomingSchedulesData?.data?.find((schedule) => {
+			const scheduleDate = new Date(schedule.appointment_date)
+			scheduleDate.setHours(0, 0, 0, 0)
+			return scheduleDate > today
+		}) ?? null
+	}, [upcomingSchedulesData])
 
 	// Generate calendar grid
 	const calendarDays = useMemo(() => {

@@ -1,39 +1,9 @@
 import { compare, hash } from "bcryptjs"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
-import { customSession } from "better-auth/plugins"
 import prisma from "@/lib/prisma"
 
 export const auth = betterAuth({
-	plugins: [
-		customSession(async ({ user, session }) => {
-			const account = await prisma.accounts.findFirst({
-				where: {
-					userId: user.id,
-				},
-				select: {
-					providerId: true,
-					user: {
-						select: {
-							firstname: true,
-							lastname: true,
-						},
-					},
-				},
-			})
-
-			return {
-				user: {
-					...user,
-					provider: account?.user,
-					providerId: account?.providerId,
-					firstname: account?.user?.firstname,
-					lastname: account?.user?.lastname,
-				},
-				session,
-			}
-		}),
-	],
 	user: {
 		modelName: "users",
 		fields: {

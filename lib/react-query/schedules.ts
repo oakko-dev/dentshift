@@ -9,9 +9,11 @@ export function useScheduleLists(params: {
 	sortBy?: string
 	sortOrder?: string
 	includePast?: boolean
+	from?: string
+	to?: string
 }) {
 	return useQuery<PaginatedResponse<ScheduleDataList>, Error>({
-		queryKey: ["scheduleListQuery", params.page, params.pageSize, params.sortBy, params.sortOrder, params.includePast],
+		queryKey: ["scheduleListQuery", params.page, params.pageSize, params.sortBy, params.sortOrder, params.includePast, params.from, params.to],
 		queryFn: async () => {
 			const queryParams = new URLSearchParams({
 				page: params.page.toString(),
@@ -26,6 +28,12 @@ export function useScheduleLists(params: {
 			}
 			if (params.includePast !== undefined) {
 				queryParams.append("includePast", params.includePast.toString())
+			}
+			if (params.from) {
+				queryParams.append("from", params.from)
+			}
+			if (params.to) {
+				queryParams.append("to", params.to)
 			}
 
 			const response = await fetch(`/api/schedules?${queryParams.toString()}`)
@@ -142,7 +150,7 @@ export function useScheduleMasterLists(excludeScheduleId?: number) {
 			if (excludeScheduleId) {
 				queryParams.append("excludeScheduleId", excludeScheduleId.toString())
 			}
-			
+
 			const url = `/api/schedules/master${queryParams.toString() ? `?${queryParams.toString()}` : ""}`
 			const response = await fetch(url)
 			if (!response.ok) {
