@@ -50,7 +50,7 @@ export default function PlacesList({ onEdit }: PlacesListProps) {
 		)
 	}
 
-	const handleDelete = async (id: number, name: string) => {
+	const handleDelete = async (id: number, name?: string) => {
 		const result = await swal.fire({
 			title: "ยืนยันการลบ",
 			text: `คุณต้องการลบสถานที่ "${name}" ใช่หรือไม่?`,
