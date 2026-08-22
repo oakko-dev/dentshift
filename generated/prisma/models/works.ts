@@ -46,6 +46,7 @@ export type WorksSumAggregateOutputType = {
 
 export type WorksMinAggregateOutputType = {
   id: bigint | null
+  user_id: string | null
   created_at: Date | null
   schedule_id: bigint | null
   total_amount: runtime.Decimal | null
@@ -59,6 +60,7 @@ export type WorksMinAggregateOutputType = {
 
 export type WorksMaxAggregateOutputType = {
   id: bigint | null
+  user_id: string | null
   created_at: Date | null
   schedule_id: bigint | null
   total_amount: runtime.Decimal | null
@@ -72,6 +74,7 @@ export type WorksMaxAggregateOutputType = {
 
 export type WorksCountAggregateOutputType = {
   id: number
+  user_id: number
   created_at: number
   schedule_id: number
   total_amount: number
@@ -105,6 +108,7 @@ export type WorksSumAggregateInputType = {
 
 export type WorksMinAggregateInputType = {
   id?: true
+  user_id?: true
   created_at?: true
   schedule_id?: true
   total_amount?: true
@@ -118,6 +122,7 @@ export type WorksMinAggregateInputType = {
 
 export type WorksMaxAggregateInputType = {
   id?: true
+  user_id?: true
   created_at?: true
   schedule_id?: true
   total_amount?: true
@@ -131,6 +136,7 @@ export type WorksMaxAggregateInputType = {
 
 export type WorksCountAggregateInputType = {
   id?: true
+  user_id?: true
   created_at?: true
   schedule_id?: true
   total_amount?: true
@@ -231,6 +237,7 @@ export type worksGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type WorksGroupByOutputType = {
   id: bigint
+  user_id: string
   created_at: Date
   schedule_id: bigint
   total_amount: runtime.Decimal
@@ -267,6 +274,7 @@ export type worksWhereInput = {
   OR?: Prisma.worksWhereInput[]
   NOT?: Prisma.worksWhereInput | Prisma.worksWhereInput[]
   id?: Prisma.BigIntFilter<"works"> | bigint | number
+  user_id?: Prisma.UuidFilter<"works"> | string
   created_at?: Prisma.DateTimeFilter<"works"> | Date | string
   schedule_id?: Prisma.BigIntFilter<"works"> | bigint | number
   total_amount?: Prisma.DecimalFilter<"works"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -278,10 +286,12 @@ export type worksWhereInput = {
   deposit_amount?: Prisma.DecimalNullableFilter<"works"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   banks?: Prisma.XOR<Prisma.BanksNullableScalarRelationFilter, Prisma.banksWhereInput> | null
   schedules?: Prisma.XOR<Prisma.SchedulesScalarRelationFilter, Prisma.schedulesWhereInput>
+  users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
 }
 
 export type worksOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   schedule_id?: Prisma.SortOrder
   total_amount?: Prisma.SortOrder
@@ -293,6 +303,7 @@ export type worksOrderByWithRelationInput = {
   deposit_amount?: Prisma.SortOrderInput | Prisma.SortOrder
   banks?: Prisma.banksOrderByWithRelationInput
   schedules?: Prisma.schedulesOrderByWithRelationInput
+  users?: Prisma.usersOrderByWithRelationInput
 }
 
 export type worksWhereUniqueInput = Prisma.AtLeast<{
@@ -300,6 +311,7 @@ export type worksWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.worksWhereInput | Prisma.worksWhereInput[]
   OR?: Prisma.worksWhereInput[]
   NOT?: Prisma.worksWhereInput | Prisma.worksWhereInput[]
+  user_id?: Prisma.UuidFilter<"works"> | string
   created_at?: Prisma.DateTimeFilter<"works"> | Date | string
   schedule_id?: Prisma.BigIntFilter<"works"> | bigint | number
   total_amount?: Prisma.DecimalFilter<"works"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -311,10 +323,12 @@ export type worksWhereUniqueInput = Prisma.AtLeast<{
   deposit_amount?: Prisma.DecimalNullableFilter<"works"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   banks?: Prisma.XOR<Prisma.BanksNullableScalarRelationFilter, Prisma.banksWhereInput> | null
   schedules?: Prisma.XOR<Prisma.SchedulesScalarRelationFilter, Prisma.schedulesWhereInput>
+  users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
 }, "id">
 
 export type worksOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   schedule_id?: Prisma.SortOrder
   total_amount?: Prisma.SortOrder
@@ -336,6 +350,7 @@ export type worksScalarWhereWithAggregatesInput = {
   OR?: Prisma.worksScalarWhereWithAggregatesInput[]
   NOT?: Prisma.worksScalarWhereWithAggregatesInput | Prisma.worksScalarWhereWithAggregatesInput[]
   id?: Prisma.BigIntWithAggregatesFilter<"works"> | bigint | number
+  user_id?: Prisma.UuidWithAggregatesFilter<"works"> | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"works"> | Date | string
   schedule_id?: Prisma.BigIntWithAggregatesFilter<"works"> | bigint | number
   total_amount?: Prisma.DecimalWithAggregatesFilter<"works"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -358,10 +373,12 @@ export type worksCreateInput = {
   deposit_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   banks?: Prisma.banksCreateNestedOneWithoutWorksInput
   schedules: Prisma.schedulesCreateNestedOneWithoutWorksInput
+  users: Prisma.usersCreateNestedOneWithoutWorksInput
 }
 
 export type worksUncheckedCreateInput = {
   id?: bigint | number
+  user_id: string
   created_at?: Date | string
   schedule_id: bigint | number
   total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -384,10 +401,12 @@ export type worksUpdateInput = {
   deposit_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   banks?: Prisma.banksUpdateOneWithoutWorksNestedInput
   schedules?: Prisma.schedulesUpdateOneRequiredWithoutWorksNestedInput
+  users?: Prisma.usersUpdateOneRequiredWithoutWorksNestedInput
 }
 
 export type worksUncheckedUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schedule_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -401,6 +420,7 @@ export type worksUncheckedUpdateInput = {
 
 export type worksCreateManyInput = {
   id?: bigint | number
+  user_id: string
   created_at?: Date | string
   schedule_id: bigint | number
   total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -425,6 +445,7 @@ export type worksUpdateManyMutationInput = {
 
 export type worksUncheckedUpdateManyInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schedule_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -448,6 +469,7 @@ export type worksOrderByRelationAggregateInput = {
 
 export type worksCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   schedule_id?: Prisma.SortOrder
   total_amount?: Prisma.SortOrder
@@ -470,6 +492,7 @@ export type worksAvgOrderByAggregateInput = {
 
 export type worksMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   schedule_id?: Prisma.SortOrder
   total_amount?: Prisma.SortOrder
@@ -483,6 +506,7 @@ export type worksMaxOrderByAggregateInput = {
 
 export type worksMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   schedule_id?: Prisma.SortOrder
   total_amount?: Prisma.SortOrder
@@ -595,6 +619,48 @@ export type NullableDecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
+export type worksCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.worksCreateWithoutUsersInput, Prisma.worksUncheckedCreateWithoutUsersInput> | Prisma.worksCreateWithoutUsersInput[] | Prisma.worksUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.worksCreateOrConnectWithoutUsersInput | Prisma.worksCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.worksCreateManyUsersInputEnvelope
+  connect?: Prisma.worksWhereUniqueInput | Prisma.worksWhereUniqueInput[]
+}
+
+export type worksUncheckedCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.worksCreateWithoutUsersInput, Prisma.worksUncheckedCreateWithoutUsersInput> | Prisma.worksCreateWithoutUsersInput[] | Prisma.worksUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.worksCreateOrConnectWithoutUsersInput | Prisma.worksCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.worksCreateManyUsersInputEnvelope
+  connect?: Prisma.worksWhereUniqueInput | Prisma.worksWhereUniqueInput[]
+}
+
+export type worksUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.worksCreateWithoutUsersInput, Prisma.worksUncheckedCreateWithoutUsersInput> | Prisma.worksCreateWithoutUsersInput[] | Prisma.worksUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.worksCreateOrConnectWithoutUsersInput | Prisma.worksCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.worksUpsertWithWhereUniqueWithoutUsersInput | Prisma.worksUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.worksCreateManyUsersInputEnvelope
+  set?: Prisma.worksWhereUniqueInput | Prisma.worksWhereUniqueInput[]
+  disconnect?: Prisma.worksWhereUniqueInput | Prisma.worksWhereUniqueInput[]
+  delete?: Prisma.worksWhereUniqueInput | Prisma.worksWhereUniqueInput[]
+  connect?: Prisma.worksWhereUniqueInput | Prisma.worksWhereUniqueInput[]
+  update?: Prisma.worksUpdateWithWhereUniqueWithoutUsersInput | Prisma.worksUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.worksUpdateManyWithWhereWithoutUsersInput | Prisma.worksUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.worksScalarWhereInput | Prisma.worksScalarWhereInput[]
+}
+
+export type worksUncheckedUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.worksCreateWithoutUsersInput, Prisma.worksUncheckedCreateWithoutUsersInput> | Prisma.worksCreateWithoutUsersInput[] | Prisma.worksUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.worksCreateOrConnectWithoutUsersInput | Prisma.worksCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.worksUpsertWithWhereUniqueWithoutUsersInput | Prisma.worksUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.worksCreateManyUsersInputEnvelope
+  set?: Prisma.worksWhereUniqueInput | Prisma.worksWhereUniqueInput[]
+  disconnect?: Prisma.worksWhereUniqueInput | Prisma.worksWhereUniqueInput[]
+  delete?: Prisma.worksWhereUniqueInput | Prisma.worksWhereUniqueInput[]
+  connect?: Prisma.worksWhereUniqueInput | Prisma.worksWhereUniqueInput[]
+  update?: Prisma.worksUpdateWithWhereUniqueWithoutUsersInput | Prisma.worksUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.worksUpdateManyWithWhereWithoutUsersInput | Prisma.worksUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.worksScalarWhereInput | Prisma.worksScalarWhereInput[]
+}
+
 export type worksCreateWithoutBanksInput = {
   id?: bigint | number
   created_at?: Date | string
@@ -605,10 +671,12 @@ export type worksCreateWithoutBanksInput = {
   deposit_date?: Date | string | null
   deposit_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   schedules: Prisma.schedulesCreateNestedOneWithoutWorksInput
+  users: Prisma.usersCreateNestedOneWithoutWorksInput
 }
 
 export type worksUncheckedCreateWithoutBanksInput = {
   id?: bigint | number
+  user_id: string
   created_at?: Date | string
   schedule_id: bigint | number
   total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -650,6 +718,7 @@ export type worksScalarWhereInput = {
   OR?: Prisma.worksScalarWhereInput[]
   NOT?: Prisma.worksScalarWhereInput | Prisma.worksScalarWhereInput[]
   id?: Prisma.BigIntFilter<"works"> | bigint | number
+  user_id?: Prisma.UuidFilter<"works"> | string
   created_at?: Prisma.DateTimeFilter<"works"> | Date | string
   schedule_id?: Prisma.BigIntFilter<"works"> | bigint | number
   total_amount?: Prisma.DecimalFilter<"works"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -671,10 +740,12 @@ export type worksCreateWithoutSchedulesInput = {
   deposit_date?: Date | string | null
   deposit_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   banks?: Prisma.banksCreateNestedOneWithoutWorksInput
+  users: Prisma.usersCreateNestedOneWithoutWorksInput
 }
 
 export type worksUncheckedCreateWithoutSchedulesInput = {
   id?: bigint | number
+  user_id: string
   created_at?: Date | string
   total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   df_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -711,8 +782,61 @@ export type worksUpdateManyWithWhereWithoutSchedulesInput = {
   data: Prisma.XOR<Prisma.worksUpdateManyMutationInput, Prisma.worksUncheckedUpdateManyWithoutSchedulesInput>
 }
 
+export type worksCreateWithoutUsersInput = {
+  id?: bigint | number
+  created_at?: Date | string
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  forecast_payment_date: Date | string
+  remark?: string | null
+  deposit_date?: Date | string | null
+  deposit_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  banks?: Prisma.banksCreateNestedOneWithoutWorksInput
+  schedules: Prisma.schedulesCreateNestedOneWithoutWorksInput
+}
+
+export type worksUncheckedCreateWithoutUsersInput = {
+  id?: bigint | number
+  created_at?: Date | string
+  schedule_id: bigint | number
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_id?: bigint | number | null
+  forecast_payment_date: Date | string
+  remark?: string | null
+  deposit_date?: Date | string | null
+  deposit_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type worksCreateOrConnectWithoutUsersInput = {
+  where: Prisma.worksWhereUniqueInput
+  create: Prisma.XOR<Prisma.worksCreateWithoutUsersInput, Prisma.worksUncheckedCreateWithoutUsersInput>
+}
+
+export type worksCreateManyUsersInputEnvelope = {
+  data: Prisma.worksCreateManyUsersInput | Prisma.worksCreateManyUsersInput[]
+  skipDuplicates?: boolean
+}
+
+export type worksUpsertWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.worksWhereUniqueInput
+  update: Prisma.XOR<Prisma.worksUpdateWithoutUsersInput, Prisma.worksUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.worksCreateWithoutUsersInput, Prisma.worksUncheckedCreateWithoutUsersInput>
+}
+
+export type worksUpdateWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.worksWhereUniqueInput
+  data: Prisma.XOR<Prisma.worksUpdateWithoutUsersInput, Prisma.worksUncheckedUpdateWithoutUsersInput>
+}
+
+export type worksUpdateManyWithWhereWithoutUsersInput = {
+  where: Prisma.worksScalarWhereInput
+  data: Prisma.XOR<Prisma.worksUpdateManyMutationInput, Prisma.worksUncheckedUpdateManyWithoutUsersInput>
+}
+
 export type worksCreateManyBanksInput = {
   id?: bigint | number
+  user_id: string
   created_at?: Date | string
   schedule_id: bigint | number
   total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -733,10 +857,12 @@ export type worksUpdateWithoutBanksInput = {
   deposit_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deposit_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   schedules?: Prisma.schedulesUpdateOneRequiredWithoutWorksNestedInput
+  users?: Prisma.usersUpdateOneRequiredWithoutWorksNestedInput
 }
 
 export type worksUncheckedUpdateWithoutBanksInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schedule_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -749,6 +875,7 @@ export type worksUncheckedUpdateWithoutBanksInput = {
 
 export type worksUncheckedUpdateManyWithoutBanksInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schedule_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -761,6 +888,7 @@ export type worksUncheckedUpdateManyWithoutBanksInput = {
 
 export type worksCreateManySchedulesInput = {
   id?: bigint | number
+  user_id: string
   created_at?: Date | string
   total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   df_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -781,10 +909,12 @@ export type worksUpdateWithoutSchedulesInput = {
   deposit_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deposit_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   banks?: Prisma.banksUpdateOneWithoutWorksNestedInput
+  users?: Prisma.usersUpdateOneRequiredWithoutWorksNestedInput
 }
 
 export type worksUncheckedUpdateWithoutSchedulesInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   df_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -797,7 +927,60 @@ export type worksUncheckedUpdateWithoutSchedulesInput = {
 
 export type worksUncheckedUpdateManyWithoutSchedulesInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  forecast_payment_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deposit_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deposit_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type worksCreateManyUsersInput = {
+  id?: bigint | number
+  created_at?: Date | string
+  schedule_id: bigint | number
+  total_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_id?: bigint | number | null
+  forecast_payment_date: Date | string
+  remark?: string | null
+  deposit_date?: Date | string | null
+  deposit_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type worksUpdateWithoutUsersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  forecast_payment_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deposit_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deposit_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  banks?: Prisma.banksUpdateOneWithoutWorksNestedInput
+  schedules?: Prisma.schedulesUpdateOneRequiredWithoutWorksNestedInput
+}
+
+export type worksUncheckedUpdateWithoutUsersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedule_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  df_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  forecast_payment_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deposit_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deposit_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type worksUncheckedUpdateManyWithoutUsersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedule_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   total_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   df_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   bank_id?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -811,6 +994,7 @@ export type worksUncheckedUpdateManyWithoutSchedulesInput = {
 
 export type worksSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  user_id?: boolean
   created_at?: boolean
   schedule_id?: boolean
   total_amount?: boolean
@@ -822,10 +1006,12 @@ export type worksSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   deposit_amount?: boolean
   banks?: boolean | Prisma.works$banksArgs<ExtArgs>
   schedules?: boolean | Prisma.schedulesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["works"]>
 
 export type worksSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  user_id?: boolean
   created_at?: boolean
   schedule_id?: boolean
   total_amount?: boolean
@@ -837,10 +1023,12 @@ export type worksSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   deposit_amount?: boolean
   banks?: boolean | Prisma.works$banksArgs<ExtArgs>
   schedules?: boolean | Prisma.schedulesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["works"]>
 
 export type worksSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  user_id?: boolean
   created_at?: boolean
   schedule_id?: boolean
   total_amount?: boolean
@@ -852,10 +1040,12 @@ export type worksSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   deposit_amount?: boolean
   banks?: boolean | Prisma.works$banksArgs<ExtArgs>
   schedules?: boolean | Prisma.schedulesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["works"]>
 
 export type worksSelectScalar = {
   id?: boolean
+  user_id?: boolean
   created_at?: boolean
   schedule_id?: boolean
   total_amount?: boolean
@@ -867,18 +1057,21 @@ export type worksSelectScalar = {
   deposit_amount?: boolean
 }
 
-export type worksOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "created_at" | "schedule_id" | "total_amount" | "df_amount" | "bank_id" | "forecast_payment_date" | "remark" | "deposit_date" | "deposit_amount", ExtArgs["result"]["works"]>
+export type worksOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "created_at" | "schedule_id" | "total_amount" | "df_amount" | "bank_id" | "forecast_payment_date" | "remark" | "deposit_date" | "deposit_amount", ExtArgs["result"]["works"]>
 export type worksInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   banks?: boolean | Prisma.works$banksArgs<ExtArgs>
   schedules?: boolean | Prisma.schedulesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }
 export type worksIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   banks?: boolean | Prisma.works$banksArgs<ExtArgs>
   schedules?: boolean | Prisma.schedulesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }
 export type worksIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   banks?: boolean | Prisma.works$banksArgs<ExtArgs>
   schedules?: boolean | Prisma.schedulesDefaultArgs<ExtArgs>
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }
 
 export type $worksPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -886,9 +1079,11 @@ export type $worksPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     banks: Prisma.$banksPayload<ExtArgs> | null
     schedules: Prisma.$schedulesPayload<ExtArgs>
+    users: Prisma.$usersPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
+    user_id: string
     created_at: Date
     schedule_id: bigint
     total_amount: runtime.Decimal
@@ -1294,6 +1489,7 @@ export interface Prisma__worksClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   banks<T extends Prisma.works$banksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.works$banksArgs<ExtArgs>>): Prisma.Prisma__banksClient<runtime.Types.Result.GetResult<Prisma.$banksPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   schedules<T extends Prisma.schedulesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.schedulesDefaultArgs<ExtArgs>>): Prisma.Prisma__schedulesClient<runtime.Types.Result.GetResult<Prisma.$schedulesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  users<T extends Prisma.usersDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usersDefaultArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1324,6 +1520,7 @@ export interface Prisma__worksClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface worksFieldRefs {
   readonly id: Prisma.FieldRef<"works", 'BigInt'>
+  readonly user_id: Prisma.FieldRef<"works", 'String'>
   readonly created_at: Prisma.FieldRef<"works", 'DateTime'>
   readonly schedule_id: Prisma.FieldRef<"works", 'BigInt'>
   readonly total_amount: Prisma.FieldRef<"works", 'Decimal'>

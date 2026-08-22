@@ -232,6 +232,8 @@ export type usersWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"users"> | Date | string
   subscriptions?: Prisma.SubscriptionsListRelationFilter
   schedules?: Prisma.SchedulesListRelationFilter
+  banks?: Prisma.BanksListRelationFilter
+  works?: Prisma.WorksListRelationFilter
   sessions?: Prisma.SessionsListRelationFilter
   accounts?: Prisma.AccountsListRelationFilter
 }
@@ -250,6 +252,8 @@ export type usersOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   subscriptions?: Prisma.subscriptionsOrderByRelationAggregateInput
   schedules?: Prisma.schedulesOrderByRelationAggregateInput
+  banks?: Prisma.banksOrderByRelationAggregateInput
+  works?: Prisma.worksOrderByRelationAggregateInput
   sessions?: Prisma.sessionsOrderByRelationAggregateInput
   accounts?: Prisma.accountsOrderByRelationAggregateInput
 }
@@ -271,6 +275,8 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"users"> | Date | string
   subscriptions?: Prisma.SubscriptionsListRelationFilter
   schedules?: Prisma.SchedulesListRelationFilter
+  banks?: Prisma.BanksListRelationFilter
+  works?: Prisma.WorksListRelationFilter
   sessions?: Prisma.SessionsListRelationFilter
   accounts?: Prisma.AccountsListRelationFilter
 }, "id" | "email">
@@ -323,6 +329,8 @@ export type usersCreateInput = {
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
   schedules?: Prisma.schedulesCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksCreateNestedManyWithoutUsersInput
   sessions?: Prisma.sessionsCreateNestedManyWithoutUserInput
   accounts?: Prisma.accountsCreateNestedManyWithoutUserInput
 }
@@ -341,6 +349,8 @@ export type usersUncheckedCreateInput = {
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
   schedules?: Prisma.schedulesUncheckedCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksUncheckedCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksUncheckedCreateNestedManyWithoutUsersInput
   sessions?: Prisma.sessionsUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUserInput
 }
@@ -359,6 +369,8 @@ export type usersUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
   schedules?: Prisma.schedulesUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUpdateManyWithoutUsersNestedInput
   sessions?: Prisma.sessionsUpdateManyWithoutUserNestedInput
   accounts?: Prisma.accountsUpdateManyWithoutUserNestedInput
 }
@@ -377,6 +389,8 @@ export type usersUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
   schedules?: Prisma.schedulesUncheckedUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUncheckedUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUncheckedUpdateManyWithoutUsersNestedInput
   sessions?: Prisma.sessionsUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.accountsUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -423,9 +437,9 @@ export type usersUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type UsersNullableScalarRelationFilter = {
-  is?: Prisma.usersWhereInput | null
-  isNot?: Prisma.usersWhereInput | null
+export type UsersScalarRelationFilter = {
+  is?: Prisma.usersWhereInput
+  isNot?: Prisma.usersWhereInput
 }
 
 export type usersCountOrderByAggregateInput = {
@@ -470,9 +484,18 @@ export type usersMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type UsersScalarRelationFilter = {
-  is?: Prisma.usersWhereInput
-  isNot?: Prisma.usersWhereInput
+export type usersCreateNestedOneWithoutBanksInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutBanksInput, Prisma.usersUncheckedCreateWithoutBanksInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutBanksInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutBanksNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutBanksInput, Prisma.usersUncheckedCreateWithoutBanksInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutBanksInput
+  upsert?: Prisma.usersUpsertWithoutBanksInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutBanksInput, Prisma.usersUpdateWithoutBanksInput>, Prisma.usersUncheckedUpdateWithoutBanksInput>
 }
 
 export type usersCreateNestedOneWithoutSchedulesInput = {
@@ -481,14 +504,26 @@ export type usersCreateNestedOneWithoutSchedulesInput = {
   connect?: Prisma.usersWhereUniqueInput
 }
 
-export type usersUpdateOneWithoutSchedulesNestedInput = {
+export type usersUpdateOneRequiredWithoutSchedulesNestedInput = {
   create?: Prisma.XOR<Prisma.usersCreateWithoutSchedulesInput, Prisma.usersUncheckedCreateWithoutSchedulesInput>
   connectOrCreate?: Prisma.usersCreateOrConnectWithoutSchedulesInput
   upsert?: Prisma.usersUpsertWithoutSchedulesInput
-  disconnect?: Prisma.usersWhereInput | boolean
-  delete?: Prisma.usersWhereInput | boolean
   connect?: Prisma.usersWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutSchedulesInput, Prisma.usersUpdateWithoutSchedulesInput>, Prisma.usersUncheckedUpdateWithoutSchedulesInput>
+}
+
+export type usersCreateNestedOneWithoutWorksInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutWorksInput, Prisma.usersUncheckedCreateWithoutWorksInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutWorksInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutWorksNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutWorksInput, Prisma.usersUncheckedCreateWithoutWorksInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutWorksInput
+  upsert?: Prisma.usersUpsertWithoutWorksInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutWorksInput, Prisma.usersUpdateWithoutWorksInput>, Prisma.usersUncheckedUpdateWithoutWorksInput>
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -537,6 +572,98 @@ export type usersUpdateOneRequiredWithoutSubscriptionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.usersUpdateWithoutSubscriptionsInput>, Prisma.usersUncheckedUpdateWithoutSubscriptionsInput>
 }
 
+export type usersCreateWithoutBanksInput = {
+  id?: string
+  name?: string | null
+  firstname?: string | null
+  lastname?: string | null
+  email: string
+  emailVerified?: boolean
+  password?: string | null
+  phone_number?: string | null
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
+  schedules?: Prisma.schedulesCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksCreateNestedManyWithoutUsersInput
+  sessions?: Prisma.sessionsCreateNestedManyWithoutUserInput
+  accounts?: Prisma.accountsCreateNestedManyWithoutUserInput
+}
+
+export type usersUncheckedCreateWithoutBanksInput = {
+  id?: string
+  name?: string | null
+  firstname?: string | null
+  lastname?: string | null
+  email: string
+  emailVerified?: boolean
+  password?: string | null
+  phone_number?: string | null
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
+  schedules?: Prisma.schedulesUncheckedCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksUncheckedCreateNestedManyWithoutUsersInput
+  sessions?: Prisma.sessionsUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type usersCreateOrConnectWithoutBanksInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutBanksInput, Prisma.usersUncheckedCreateWithoutBanksInput>
+}
+
+export type usersUpsertWithoutBanksInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutBanksInput, Prisma.usersUncheckedUpdateWithoutBanksInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutBanksInput, Prisma.usersUncheckedCreateWithoutBanksInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutBanksInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutBanksInput, Prisma.usersUncheckedUpdateWithoutBanksInput>
+}
+
+export type usersUpdateWithoutBanksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
+  schedules?: Prisma.schedulesUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUpdateManyWithoutUsersNestedInput
+  sessions?: Prisma.sessionsUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.accountsUpdateManyWithoutUserNestedInput
+}
+
+export type usersUncheckedUpdateWithoutBanksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
+  schedules?: Prisma.schedulesUncheckedUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUncheckedUpdateManyWithoutUsersNestedInput
+  sessions?: Prisma.sessionsUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.accountsUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type usersCreateWithoutSchedulesInput = {
   id?: string
   name?: string | null
@@ -550,6 +677,8 @@ export type usersCreateWithoutSchedulesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksCreateNestedManyWithoutUsersInput
   sessions?: Prisma.sessionsCreateNestedManyWithoutUserInput
   accounts?: Prisma.accountsCreateNestedManyWithoutUserInput
 }
@@ -567,6 +696,8 @@ export type usersUncheckedCreateWithoutSchedulesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksUncheckedCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksUncheckedCreateNestedManyWithoutUsersInput
   sessions?: Prisma.sessionsUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUserInput
 }
@@ -600,6 +731,8 @@ export type usersUpdateWithoutSchedulesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUpdateManyWithoutUsersNestedInput
   sessions?: Prisma.sessionsUpdateManyWithoutUserNestedInput
   accounts?: Prisma.accountsUpdateManyWithoutUserNestedInput
 }
@@ -617,6 +750,100 @@ export type usersUncheckedUpdateWithoutSchedulesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUncheckedUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUncheckedUpdateManyWithoutUsersNestedInput
+  sessions?: Prisma.sessionsUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.accountsUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type usersCreateWithoutWorksInput = {
+  id?: string
+  name?: string | null
+  firstname?: string | null
+  lastname?: string | null
+  email: string
+  emailVerified?: boolean
+  password?: string | null
+  phone_number?: string | null
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
+  schedules?: Prisma.schedulesCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksCreateNestedManyWithoutUsersInput
+  sessions?: Prisma.sessionsCreateNestedManyWithoutUserInput
+  accounts?: Prisma.accountsCreateNestedManyWithoutUserInput
+}
+
+export type usersUncheckedCreateWithoutWorksInput = {
+  id?: string
+  name?: string | null
+  firstname?: string | null
+  lastname?: string | null
+  email: string
+  emailVerified?: boolean
+  password?: string | null
+  phone_number?: string | null
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
+  schedules?: Prisma.schedulesUncheckedCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksUncheckedCreateNestedManyWithoutUsersInput
+  sessions?: Prisma.sessionsUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type usersCreateOrConnectWithoutWorksInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutWorksInput, Prisma.usersUncheckedCreateWithoutWorksInput>
+}
+
+export type usersUpsertWithoutWorksInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutWorksInput, Prisma.usersUncheckedUpdateWithoutWorksInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutWorksInput, Prisma.usersUncheckedCreateWithoutWorksInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutWorksInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutWorksInput, Prisma.usersUncheckedUpdateWithoutWorksInput>
+}
+
+export type usersUpdateWithoutWorksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
+  schedules?: Prisma.schedulesUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUpdateManyWithoutUsersNestedInput
+  sessions?: Prisma.sessionsUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.accountsUpdateManyWithoutUserNestedInput
+}
+
+export type usersUncheckedUpdateWithoutWorksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
+  schedules?: Prisma.schedulesUncheckedUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUncheckedUpdateManyWithoutUsersNestedInput
   sessions?: Prisma.sessionsUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.accountsUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -635,6 +862,8 @@ export type usersCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
   schedules?: Prisma.schedulesCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksCreateNestedManyWithoutUsersInput
   accounts?: Prisma.accountsCreateNestedManyWithoutUserInput
 }
 
@@ -652,6 +881,8 @@ export type usersUncheckedCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
   schedules?: Prisma.schedulesUncheckedCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksUncheckedCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksUncheckedCreateNestedManyWithoutUsersInput
   accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -685,6 +916,8 @@ export type usersUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
   schedules?: Prisma.schedulesUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUpdateManyWithoutUsersNestedInput
   accounts?: Prisma.accountsUpdateManyWithoutUserNestedInput
 }
 
@@ -702,6 +935,8 @@ export type usersUncheckedUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
   schedules?: Prisma.schedulesUncheckedUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUncheckedUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUncheckedUpdateManyWithoutUsersNestedInput
   accounts?: Prisma.accountsUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -719,6 +954,8 @@ export type usersCreateWithoutAccountsInput = {
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
   schedules?: Prisma.schedulesCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksCreateNestedManyWithoutUsersInput
   sessions?: Prisma.sessionsCreateNestedManyWithoutUserInput
 }
 
@@ -736,6 +973,8 @@ export type usersUncheckedCreateWithoutAccountsInput = {
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
   schedules?: Prisma.schedulesUncheckedCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksUncheckedCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksUncheckedCreateNestedManyWithoutUsersInput
   sessions?: Prisma.sessionsUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -769,6 +1008,8 @@ export type usersUpdateWithoutAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
   schedules?: Prisma.schedulesUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUpdateManyWithoutUsersNestedInput
   sessions?: Prisma.sessionsUpdateManyWithoutUserNestedInput
 }
 
@@ -786,6 +1027,8 @@ export type usersUncheckedUpdateWithoutAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
   schedules?: Prisma.schedulesUncheckedUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUncheckedUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUncheckedUpdateManyWithoutUsersNestedInput
   sessions?: Prisma.sessionsUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -802,6 +1045,8 @@ export type usersCreateWithoutSubscriptionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   schedules?: Prisma.schedulesCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksCreateNestedManyWithoutUsersInput
   sessions?: Prisma.sessionsCreateNestedManyWithoutUserInput
   accounts?: Prisma.accountsCreateNestedManyWithoutUserInput
 }
@@ -819,6 +1064,8 @@ export type usersUncheckedCreateWithoutSubscriptionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   schedules?: Prisma.schedulesUncheckedCreateNestedManyWithoutUsersInput
+  banks?: Prisma.banksUncheckedCreateNestedManyWithoutUsersInput
+  works?: Prisma.worksUncheckedCreateNestedManyWithoutUsersInput
   sessions?: Prisma.sessionsUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUserInput
 }
@@ -852,6 +1099,8 @@ export type usersUpdateWithoutSubscriptionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schedules?: Prisma.schedulesUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUpdateManyWithoutUsersNestedInput
   sessions?: Prisma.sessionsUpdateManyWithoutUserNestedInput
   accounts?: Prisma.accountsUpdateManyWithoutUserNestedInput
 }
@@ -869,6 +1118,8 @@ export type usersUncheckedUpdateWithoutSubscriptionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schedules?: Prisma.schedulesUncheckedUpdateManyWithoutUsersNestedInput
+  banks?: Prisma.banksUncheckedUpdateManyWithoutUsersNestedInput
+  works?: Prisma.worksUncheckedUpdateManyWithoutUsersNestedInput
   sessions?: Prisma.sessionsUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.accountsUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -881,6 +1132,8 @@ export type usersUncheckedUpdateWithoutSubscriptionsInput = {
 export type UsersCountOutputType = {
   subscriptions: number
   schedules: number
+  banks: number
+  works: number
   sessions: number
   accounts: number
 }
@@ -888,6 +1141,8 @@ export type UsersCountOutputType = {
 export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subscriptions?: boolean | UsersCountOutputTypeCountSubscriptionsArgs
   schedules?: boolean | UsersCountOutputTypeCountSchedulesArgs
+  banks?: boolean | UsersCountOutputTypeCountBanksArgs
+  works?: boolean | UsersCountOutputTypeCountWorksArgs
   sessions?: boolean | UsersCountOutputTypeCountSessionsArgs
   accounts?: boolean | UsersCountOutputTypeCountAccountsArgs
 }
@@ -919,6 +1174,20 @@ export type UsersCountOutputTypeCountSchedulesArgs<ExtArgs extends runtime.Types
 /**
  * UsersCountOutputType without action
  */
+export type UsersCountOutputTypeCountBanksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.banksWhereInput
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountWorksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.worksWhereInput
+}
+
+/**
+ * UsersCountOutputType without action
+ */
 export type UsersCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.sessionsWhereInput
 }
@@ -945,6 +1214,8 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   updatedAt?: boolean
   subscriptions?: boolean | Prisma.users$subscriptionsArgs<ExtArgs>
   schedules?: boolean | Prisma.users$schedulesArgs<ExtArgs>
+  banks?: boolean | Prisma.users$banksArgs<ExtArgs>
+  works?: boolean | Prisma.users$worksArgs<ExtArgs>
   sessions?: boolean | Prisma.users$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.users$accountsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
@@ -996,6 +1267,8 @@ export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subscriptions?: boolean | Prisma.users$subscriptionsArgs<ExtArgs>
   schedules?: boolean | Prisma.users$schedulesArgs<ExtArgs>
+  banks?: boolean | Prisma.users$banksArgs<ExtArgs>
+  works?: boolean | Prisma.users$worksArgs<ExtArgs>
   sessions?: boolean | Prisma.users$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.users$accountsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
@@ -1008,6 +1281,8 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     subscriptions: Prisma.$subscriptionsPayload<ExtArgs>[]
     schedules: Prisma.$schedulesPayload<ExtArgs>[]
+    banks: Prisma.$banksPayload<ExtArgs>[]
+    works: Prisma.$worksPayload<ExtArgs>[]
     sessions: Prisma.$sessionsPayload<ExtArgs>[]
     accounts: Prisma.$accountsPayload<ExtArgs>[]
   }
@@ -1419,6 +1694,8 @@ export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   subscriptions<T extends Prisma.users$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$subscriptionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   schedules<T extends Prisma.users$schedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$schedulesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  banks<T extends Prisma.users$banksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$banksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$banksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  works<T extends Prisma.users$worksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$worksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$worksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.users$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$sessionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.users$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$accountsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1894,6 +2171,54 @@ export type users$schedulesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.SchedulesScalarFieldEnum | Prisma.SchedulesScalarFieldEnum[]
+}
+
+/**
+ * users.banks
+ */
+export type users$banksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the banks
+   */
+  select?: Prisma.banksSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the banks
+   */
+  omit?: Prisma.banksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.banksInclude<ExtArgs> | null
+  where?: Prisma.banksWhereInput
+  orderBy?: Prisma.banksOrderByWithRelationInput | Prisma.banksOrderByWithRelationInput[]
+  cursor?: Prisma.banksWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BanksScalarFieldEnum | Prisma.BanksScalarFieldEnum[]
+}
+
+/**
+ * users.works
+ */
+export type users$worksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the works
+   */
+  select?: Prisma.worksSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the works
+   */
+  omit?: Prisma.worksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.worksInclude<ExtArgs> | null
+  where?: Prisma.worksWhereInput
+  orderBy?: Prisma.worksOrderByWithRelationInput | Prisma.worksOrderByWithRelationInput[]
+  cursor?: Prisma.worksWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorksScalarFieldEnum | Prisma.WorksScalarFieldEnum[]
 }
 
 /**

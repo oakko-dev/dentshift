@@ -8,6 +8,8 @@ export default defineConfig({
 	migrations: {
 		path: "prisma/migrations",
 	},
+	// App requests: connect with DATABASE_URL, then SET LOCAL ROLE dentshift_app per request (see lib/db/with-dentist.ts).
+	// Migrations use the same DATABASE_URL as superuser/bypass; run `npx prisma migrate deploy` before starting the app.
 	datasource: {
 		url: env("DATABASE_URL"),
 	},

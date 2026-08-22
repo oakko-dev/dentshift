@@ -1,30 +1,39 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 
-import prisma from "@/lib/prisma"
+import { requireDentist } from "@/lib/api/require-dentist"
+import { withDentist } from "@/lib/db/with-dentist"
 
-// GET single bank by id
 export async function GET(
 	request: NextRequest,
 	{ params }: { params: Promise<{ id: string }> },
 ) {
+	const authResult = await requireDentist(request)
+	if (authResult.error) {
+		return authResult.error
+	}
+
 	try {
 		const { id } = await params
-		const bank = await prisma.banks.findUnique({
-			where: { id: BigInt(id) },
-		})
+		const userId = authResult.session.user.id
 
-		if (!bank) {
-			return NextResponse.json(
-				{ error: "Bank not found" },
-				{ status: 404 },
-			)
-		}
+		return await withDentist(userId, async (db) => {
+			const bank = await db.banks.findFirst({
+				where: { id: BigInt(id), user_id: userId },
+			})
 
-		return NextResponse.json({
-			id: Number(bank.id),
-			account_name: bank.account_name,
-			account_number: bank.account_number.toString(),
+			if (!bank) {
+				return NextResponse.json(
+					{ error: "Bank not found" },
+					{ status: 404 },
+				)
+			}
+
+			return NextResponse.json({
+				id: Number(bank.id),
+				account_name: bank.account_name,
+				account_number: bank.account_number.toString(),
+			})
 		})
 	}
 	catch (error) {
@@ -36,33 +45,61 @@ export async function GET(
 	}
 }
 
-// PUT update bank
 export async function PUT(
 	request: NextRequest,
 	{ params }: { params: Promise<{ id: string }> },
 ) {
+	const authResult = await requireDentist(request)
+	if (authResult.error) {
+		return authResult.error
+	}
+
 	try {
 		const { id } = await params
 		const body = await request.json()
 		const { account_name, account_number } = body
-
-		// Remove any non-numeric characters from account_number
+		const userId = authResult.session.user.id
 		const sanitizedAccountNumber = account_number.replace(/\D/g, "")
 
-		const updatedBank = await prisma.banks.update({
-			where: { id: BigInt(id) },
-			data: {
-				account_name,
-				account_number: sanitizedAccountNumber,
-			},
-		})
+		return await withDentist(userId, async (db) => {
+			const existing = await db.banks.findFirst({
+				where: { id: BigInt(id), user_id: userId },
+				select: { id: true },
+			})
 
-		return NextResponse.json({
-			id: Number(updatedBank.id),
-			message: "Bank updated successfully",
+			if (!existing) {
+				return NextResponse.json(
+					{ error: "Bank not found" },
+					{ status: 404 },
+				)
+			}
+
+			const updatedBank = await db.banks.update({
+				where: { id: BigInt(id) },
+				data: {
+					account_name,
+					account_number: sanitizedAccountNumber,
+				},
+			})
+
+			return NextResponse.json({
+				id: Number(updatedBank.id),
+				message: "Bank updated successfully",
+			})
 		})
 	}
-	catch (error) {
+	catch (error: unknown) {
+		if (
+			error
+			&& typeof error === "object"
+			&& "code" in error
+			&& error.code === "P2002"
+		) {
+			return NextResponse.json(
+				{ error: "Account number already exists for this dentist" },
+				{ status: 409 },
+			)
+		}
 		console.error("Error updating bank:", error)
 		return NextResponse.json(
 			{ error: "Failed to update bank" },
@@ -71,19 +108,39 @@ export async function PUT(
 	}
 }
 
-// DELETE bank
 export async function DELETE(
 	request: NextRequest,
 	{ params }: { params: Promise<{ id: string }> },
 ) {
+	const authResult = await requireDentist(request)
+	if (authResult.error) {
+		return authResult.error
+	}
+
 	try {
 		const { id } = await params
-		await prisma.banks.delete({
-			where: { id: BigInt(id) },
-		})
+		const userId = authResult.session.user.id
 
-		return NextResponse.json({
-			message: "Bank deleted successfully",
+		return await withDentist(userId, async (db) => {
+			const existing = await db.banks.findFirst({
+				where: { id: BigInt(id), user_id: userId },
+				select: { id: true },
+			})
+
+			if (!existing) {
+				return NextResponse.json(
+					{ error: "Bank not found" },
+					{ status: 404 },
+				)
+			}
+
+			await db.banks.delete({
+				where: { id: BigInt(id) },
+			})
+
+			return NextResponse.json({
+				message: "Bank deleted successfully",
+			})
 		})
 	}
 	catch (error) {

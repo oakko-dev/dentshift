@@ -6,7 +6,9 @@
 		"dev": "next dev --webpack",
 		"build": "next build --webpack && prisma generate",
 		"start": "next start",
-		"lint": "eslint . --debug"
+		"lint": "eslint . --debug",
+		"test": "node --import tsx --env-file-if-exists=.env --test tests/**/*.test.ts",
+		"test:integration": "RUN_DENTIST_WALL_INTEGRATION=1 node --import tsx --env-file-if-exists=.env --test tests/**/*.test.ts"
 	},
 	"dependencies": {
 		"@antfu/eslint-config": "^6.2.0",

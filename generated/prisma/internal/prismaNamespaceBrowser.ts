@@ -81,6 +81,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const BanksScalarFieldEnum = {
   id: 'id',
+  user_id: 'user_id',
   account_name: 'account_name',
   account_number: 'account_number'
 } as const
@@ -129,6 +130,7 @@ export type SchedulesScalarFieldEnum = (typeof SchedulesScalarFieldEnum)[keyof t
 
 export const WorksScalarFieldEnum = {
   id: 'id',
+  user_id: 'user_id',
   created_at: 'created_at',
   schedule_id: 'schedule_id',
   total_amount: 'total_amount',

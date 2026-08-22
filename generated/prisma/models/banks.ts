@@ -36,18 +36,21 @@ export type BanksSumAggregateOutputType = {
 
 export type BanksMinAggregateOutputType = {
   id: bigint | null
+  user_id: string | null
   account_name: string | null
   account_number: string | null
 }
 
 export type BanksMaxAggregateOutputType = {
   id: bigint | null
+  user_id: string | null
   account_name: string | null
   account_number: string | null
 }
 
 export type BanksCountAggregateOutputType = {
   id: number
+  user_id: number
   account_name: number
   account_number: number
   _all: number
@@ -64,18 +67,21 @@ export type BanksSumAggregateInputType = {
 
 export type BanksMinAggregateInputType = {
   id?: true
+  user_id?: true
   account_name?: true
   account_number?: true
 }
 
 export type BanksMaxAggregateInputType = {
   id?: true
+  user_id?: true
   account_name?: true
   account_number?: true
 }
 
 export type BanksCountAggregateInputType = {
   id?: true
+  user_id?: true
   account_name?: true
   account_number?: true
   _all?: true
@@ -169,6 +175,7 @@ export type banksGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type BanksGroupByOutputType = {
   id: bigint
+  user_id: string
   account_name: string
   account_number: string
   _count: BanksCountAggregateOutputType | null
@@ -198,30 +205,38 @@ export type banksWhereInput = {
   OR?: Prisma.banksWhereInput[]
   NOT?: Prisma.banksWhereInput | Prisma.banksWhereInput[]
   id?: Prisma.BigIntFilter<"banks"> | bigint | number
+  user_id?: Prisma.UuidFilter<"banks"> | string
   account_name?: Prisma.StringFilter<"banks"> | string
   account_number?: Prisma.StringFilter<"banks"> | string
+  users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   works?: Prisma.WorksListRelationFilter
 }
 
 export type banksOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   account_name?: Prisma.SortOrder
   account_number?: Prisma.SortOrder
+  users?: Prisma.usersOrderByWithRelationInput
   works?: Prisma.worksOrderByRelationAggregateInput
 }
 
 export type banksWhereUniqueInput = Prisma.AtLeast<{
   id?: bigint | number
+  user_id_account_number?: Prisma.banksUser_idAccount_numberCompoundUniqueInput
   AND?: Prisma.banksWhereInput | Prisma.banksWhereInput[]
   OR?: Prisma.banksWhereInput[]
   NOT?: Prisma.banksWhereInput | Prisma.banksWhereInput[]
+  user_id?: Prisma.UuidFilter<"banks"> | string
   account_name?: Prisma.StringFilter<"banks"> | string
   account_number?: Prisma.StringFilter<"banks"> | string
+  users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   works?: Prisma.WorksListRelationFilter
-}, "id">
+}, "id" | "user_id_account_number">
 
 export type banksOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   account_name?: Prisma.SortOrder
   account_number?: Prisma.SortOrder
   _count?: Prisma.banksCountOrderByAggregateInput
@@ -236,6 +251,7 @@ export type banksScalarWhereWithAggregatesInput = {
   OR?: Prisma.banksScalarWhereWithAggregatesInput[]
   NOT?: Prisma.banksScalarWhereWithAggregatesInput | Prisma.banksScalarWhereWithAggregatesInput[]
   id?: Prisma.BigIntWithAggregatesFilter<"banks"> | bigint | number
+  user_id?: Prisma.UuidWithAggregatesFilter<"banks"> | string
   account_name?: Prisma.StringWithAggregatesFilter<"banks"> | string
   account_number?: Prisma.StringWithAggregatesFilter<"banks"> | string
 }
@@ -244,11 +260,13 @@ export type banksCreateInput = {
   id?: bigint | number
   account_name: string
   account_number: string
+  users: Prisma.usersCreateNestedOneWithoutBanksInput
   works?: Prisma.worksCreateNestedManyWithoutBanksInput
 }
 
 export type banksUncheckedCreateInput = {
   id?: bigint | number
+  user_id: string
   account_name: string
   account_number: string
   works?: Prisma.worksUncheckedCreateNestedManyWithoutBanksInput
@@ -258,11 +276,13 @@ export type banksUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   account_name?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  users?: Prisma.usersUpdateOneRequiredWithoutBanksNestedInput
   works?: Prisma.worksUpdateManyWithoutBanksNestedInput
 }
 
 export type banksUncheckedUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
   account_name?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
   works?: Prisma.worksUncheckedUpdateManyWithoutBanksNestedInput
@@ -270,6 +290,7 @@ export type banksUncheckedUpdateInput = {
 
 export type banksCreateManyInput = {
   id?: bigint | number
+  user_id: string
   account_name: string
   account_number: string
 }
@@ -282,12 +303,19 @@ export type banksUpdateManyMutationInput = {
 
 export type banksUncheckedUpdateManyInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
   account_name?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
+export type banksUser_idAccount_numberCompoundUniqueInput = {
+  user_id: string
+  account_number: string
+}
+
 export type banksCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   account_name?: Prisma.SortOrder
   account_number?: Prisma.SortOrder
 }
@@ -298,12 +326,14 @@ export type banksAvgOrderByAggregateInput = {
 
 export type banksMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   account_name?: Prisma.SortOrder
   account_number?: Prisma.SortOrder
 }
 
 export type banksMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   account_name?: Prisma.SortOrder
   account_number?: Prisma.SortOrder
 }
@@ -315,6 +345,16 @@ export type banksSumOrderByAggregateInput = {
 export type BanksNullableScalarRelationFilter = {
   is?: Prisma.banksWhereInput | null
   isNot?: Prisma.banksWhereInput | null
+}
+
+export type BanksListRelationFilter = {
+  every?: Prisma.banksWhereInput
+  some?: Prisma.banksWhereInput
+  none?: Prisma.banksWhereInput
+}
+
+export type banksOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type BigIntFieldUpdateOperationsInput = {
@@ -345,14 +385,58 @@ export type banksUpdateOneWithoutWorksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.banksUpdateToOneWithWhereWithoutWorksInput, Prisma.banksUpdateWithoutWorksInput>, Prisma.banksUncheckedUpdateWithoutWorksInput>
 }
 
+export type banksCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.banksCreateWithoutUsersInput, Prisma.banksUncheckedCreateWithoutUsersInput> | Prisma.banksCreateWithoutUsersInput[] | Prisma.banksUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.banksCreateOrConnectWithoutUsersInput | Prisma.banksCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.banksCreateManyUsersInputEnvelope
+  connect?: Prisma.banksWhereUniqueInput | Prisma.banksWhereUniqueInput[]
+}
+
+export type banksUncheckedCreateNestedManyWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.banksCreateWithoutUsersInput, Prisma.banksUncheckedCreateWithoutUsersInput> | Prisma.banksCreateWithoutUsersInput[] | Prisma.banksUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.banksCreateOrConnectWithoutUsersInput | Prisma.banksCreateOrConnectWithoutUsersInput[]
+  createMany?: Prisma.banksCreateManyUsersInputEnvelope
+  connect?: Prisma.banksWhereUniqueInput | Prisma.banksWhereUniqueInput[]
+}
+
+export type banksUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.banksCreateWithoutUsersInput, Prisma.banksUncheckedCreateWithoutUsersInput> | Prisma.banksCreateWithoutUsersInput[] | Prisma.banksUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.banksCreateOrConnectWithoutUsersInput | Prisma.banksCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.banksUpsertWithWhereUniqueWithoutUsersInput | Prisma.banksUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.banksCreateManyUsersInputEnvelope
+  set?: Prisma.banksWhereUniqueInput | Prisma.banksWhereUniqueInput[]
+  disconnect?: Prisma.banksWhereUniqueInput | Prisma.banksWhereUniqueInput[]
+  delete?: Prisma.banksWhereUniqueInput | Prisma.banksWhereUniqueInput[]
+  connect?: Prisma.banksWhereUniqueInput | Prisma.banksWhereUniqueInput[]
+  update?: Prisma.banksUpdateWithWhereUniqueWithoutUsersInput | Prisma.banksUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.banksUpdateManyWithWhereWithoutUsersInput | Prisma.banksUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.banksScalarWhereInput | Prisma.banksScalarWhereInput[]
+}
+
+export type banksUncheckedUpdateManyWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.banksCreateWithoutUsersInput, Prisma.banksUncheckedCreateWithoutUsersInput> | Prisma.banksCreateWithoutUsersInput[] | Prisma.banksUncheckedCreateWithoutUsersInput[]
+  connectOrCreate?: Prisma.banksCreateOrConnectWithoutUsersInput | Prisma.banksCreateOrConnectWithoutUsersInput[]
+  upsert?: Prisma.banksUpsertWithWhereUniqueWithoutUsersInput | Prisma.banksUpsertWithWhereUniqueWithoutUsersInput[]
+  createMany?: Prisma.banksCreateManyUsersInputEnvelope
+  set?: Prisma.banksWhereUniqueInput | Prisma.banksWhereUniqueInput[]
+  disconnect?: Prisma.banksWhereUniqueInput | Prisma.banksWhereUniqueInput[]
+  delete?: Prisma.banksWhereUniqueInput | Prisma.banksWhereUniqueInput[]
+  connect?: Prisma.banksWhereUniqueInput | Prisma.banksWhereUniqueInput[]
+  update?: Prisma.banksUpdateWithWhereUniqueWithoutUsersInput | Prisma.banksUpdateWithWhereUniqueWithoutUsersInput[]
+  updateMany?: Prisma.banksUpdateManyWithWhereWithoutUsersInput | Prisma.banksUpdateManyWithWhereWithoutUsersInput[]
+  deleteMany?: Prisma.banksScalarWhereInput | Prisma.banksScalarWhereInput[]
+}
+
 export type banksCreateWithoutWorksInput = {
   id?: bigint | number
   account_name: string
   account_number: string
+  users: Prisma.usersCreateNestedOneWithoutBanksInput
 }
 
 export type banksUncheckedCreateWithoutWorksInput = {
   id?: bigint | number
+  user_id: string
   account_name: string
   account_number: string
 }
@@ -377,9 +461,87 @@ export type banksUpdateWithoutWorksInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   account_name?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  users?: Prisma.usersUpdateOneRequiredWithoutBanksNestedInput
 }
 
 export type banksUncheckedUpdateWithoutWorksInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  account_name?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type banksCreateWithoutUsersInput = {
+  id?: bigint | number
+  account_name: string
+  account_number: string
+  works?: Prisma.worksCreateNestedManyWithoutBanksInput
+}
+
+export type banksUncheckedCreateWithoutUsersInput = {
+  id?: bigint | number
+  account_name: string
+  account_number: string
+  works?: Prisma.worksUncheckedCreateNestedManyWithoutBanksInput
+}
+
+export type banksCreateOrConnectWithoutUsersInput = {
+  where: Prisma.banksWhereUniqueInput
+  create: Prisma.XOR<Prisma.banksCreateWithoutUsersInput, Prisma.banksUncheckedCreateWithoutUsersInput>
+}
+
+export type banksCreateManyUsersInputEnvelope = {
+  data: Prisma.banksCreateManyUsersInput | Prisma.banksCreateManyUsersInput[]
+  skipDuplicates?: boolean
+}
+
+export type banksUpsertWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.banksWhereUniqueInput
+  update: Prisma.XOR<Prisma.banksUpdateWithoutUsersInput, Prisma.banksUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.banksCreateWithoutUsersInput, Prisma.banksUncheckedCreateWithoutUsersInput>
+}
+
+export type banksUpdateWithWhereUniqueWithoutUsersInput = {
+  where: Prisma.banksWhereUniqueInput
+  data: Prisma.XOR<Prisma.banksUpdateWithoutUsersInput, Prisma.banksUncheckedUpdateWithoutUsersInput>
+}
+
+export type banksUpdateManyWithWhereWithoutUsersInput = {
+  where: Prisma.banksScalarWhereInput
+  data: Prisma.XOR<Prisma.banksUpdateManyMutationInput, Prisma.banksUncheckedUpdateManyWithoutUsersInput>
+}
+
+export type banksScalarWhereInput = {
+  AND?: Prisma.banksScalarWhereInput | Prisma.banksScalarWhereInput[]
+  OR?: Prisma.banksScalarWhereInput[]
+  NOT?: Prisma.banksScalarWhereInput | Prisma.banksScalarWhereInput[]
+  id?: Prisma.BigIntFilter<"banks"> | bigint | number
+  user_id?: Prisma.UuidFilter<"banks"> | string
+  account_name?: Prisma.StringFilter<"banks"> | string
+  account_number?: Prisma.StringFilter<"banks"> | string
+}
+
+export type banksCreateManyUsersInput = {
+  id?: bigint | number
+  account_name: string
+  account_number: string
+}
+
+export type banksUpdateWithoutUsersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  account_name?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  works?: Prisma.worksUpdateManyWithoutBanksNestedInput
+}
+
+export type banksUncheckedUpdateWithoutUsersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  account_name?: Prisma.StringFieldUpdateOperationsInput | string
+  account_number?: Prisma.StringFieldUpdateOperationsInput | string
+  works?: Prisma.worksUncheckedUpdateManyWithoutBanksNestedInput
+}
+
+export type banksUncheckedUpdateManyWithoutUsersInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   account_name?: Prisma.StringFieldUpdateOperationsInput | string
   account_number?: Prisma.StringFieldUpdateOperationsInput | string
@@ -418,45 +580,59 @@ export type BanksCountOutputTypeCountWorksArgs<ExtArgs extends runtime.Types.Ext
 
 export type banksSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  user_id?: boolean
   account_name?: boolean
   account_number?: boolean
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   works?: boolean | Prisma.banks$worksArgs<ExtArgs>
   _count?: boolean | Prisma.BanksCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["banks"]>
 
 export type banksSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  user_id?: boolean
   account_name?: boolean
   account_number?: boolean
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["banks"]>
 
 export type banksSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  user_id?: boolean
   account_name?: boolean
   account_number?: boolean
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["banks"]>
 
 export type banksSelectScalar = {
   id?: boolean
+  user_id?: boolean
   account_name?: boolean
   account_number?: boolean
 }
 
-export type banksOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "account_name" | "account_number", ExtArgs["result"]["banks"]>
+export type banksOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "account_name" | "account_number", ExtArgs["result"]["banks"]>
 export type banksInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   works?: boolean | Prisma.banks$worksArgs<ExtArgs>
   _count?: boolean | Prisma.BanksCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type banksIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type banksIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type banksIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
+}
+export type banksIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
+}
 
 export type $banksPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "banks"
   objects: {
+    users: Prisma.$usersPayload<ExtArgs>
     works: Prisma.$worksPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
+    user_id: string
     account_name: string
     account_number: string
   }, ExtArgs["result"]["banks"]>
@@ -853,6 +1029,7 @@ readonly fields: banksFieldRefs;
  */
 export interface Prisma__banksClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  users<T extends Prisma.usersDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usersDefaultArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   works<T extends Prisma.banks$worksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.banks$worksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$worksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -884,6 +1061,7 @@ export interface Prisma__banksClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface banksFieldRefs {
   readonly id: Prisma.FieldRef<"banks", 'BigInt'>
+  readonly user_id: Prisma.FieldRef<"banks", 'String'>
   readonly account_name: Prisma.FieldRef<"banks", 'String'>
   readonly account_number: Prisma.FieldRef<"banks", 'String'>
 }
@@ -1135,6 +1313,10 @@ export type banksCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.banksCreateManyInput | Prisma.banksCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.banksIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1205,6 +1387,10 @@ export type banksUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many banks to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.banksIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
