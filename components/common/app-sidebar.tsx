@@ -5,8 +5,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
-import { PWASettingsModal } from "@/components/pwa/pwa-settings-modal"
-import { Button } from "@/components/ui/button"
 import {
 	Sidebar,
 	SidebarContent,
@@ -30,8 +28,6 @@ export function AppSidebar() {
 		schedules: false,
 		works: false,
 	})
-
-	const [isPWASettingsOpen, setIsPWASettingsOpen] = useState(false)
 
 	const checkIfMenuActive = useCallback(
 		(basePath: string, excludePaths: string[] = []) => {
@@ -154,16 +150,15 @@ export function AppSidebar() {
 														</span>
 													</div>
 												</div>
-												<Button
-													variant="ghost"
-													size="icon"
-													className="size-8 shrink-0"
-													onClick={() => setIsPWASettingsOpen(true)}
-													title="ตั้งค่า PWA"
-												>
-													<Icon icon="material-symbols:settings" className="size-5" />
-												</Button>
 											</div>
+										</SidebarMenuItem>
+										<SidebarMenuItem>
+											<SidebarMenuButton asChild>
+												<Link href="/profile">
+													<Icon icon="material-symbols:person" />
+													<span>โปรไฟล์</span>
+												</Link>
+											</SidebarMenuButton>
 										</SidebarMenuItem>
 										<SidebarMenuItem>
 											<SidebarMenuButton onClick={handleLogout} className="cursor-pointer">
@@ -177,16 +172,12 @@ export function AppSidebar() {
 									<SidebarMenuItem>
 										<SidebarMenuButton onClick={handleLogout} className="cursor-pointer">
 											<Icon icon="material-symbols:logout" />
-											<span>{session?.session.id}</span>
+											<span>ออกจากระบบ</span>
 										</SidebarMenuButton>
 									</SidebarMenuItem>
 								)}
 				</SidebarMenu>
 			</SidebarFooter>
-			<PWASettingsModal
-				isOpen={isPWASettingsOpen}
-				onClose={() => setIsPWASettingsOpen(false)}
-			/>
 		</Sidebar>
 	)
 }

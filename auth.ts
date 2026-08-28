@@ -18,6 +18,10 @@ export const auth = betterAuth({
 				type: "string",
 				required: false,
 			},
+			profileCompleted: {
+				type: "boolean",
+				required: false,
+			},
 		},
 	},
 	account: {

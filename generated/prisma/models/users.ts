@@ -34,6 +34,7 @@ export type UsersMinAggregateOutputType = {
   password: string | null
   phone_number: string | null
   image: string | null
+  profileCompleted: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -48,6 +49,7 @@ export type UsersMaxAggregateOutputType = {
   password: string | null
   phone_number: string | null
   image: string | null
+  profileCompleted: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +64,7 @@ export type UsersCountAggregateOutputType = {
   password: number
   phone_number: number
   image: number
+  profileCompleted: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -78,6 +81,7 @@ export type UsersMinAggregateInputType = {
   password?: true
   phone_number?: true
   image?: true
+  profileCompleted?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,6 +96,7 @@ export type UsersMaxAggregateInputType = {
   password?: true
   phone_number?: true
   image?: true
+  profileCompleted?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +111,7 @@ export type UsersCountAggregateInputType = {
   password?: true
   phone_number?: true
   image?: true
+  profileCompleted?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -193,6 +199,7 @@ export type UsersGroupByOutputType = {
   password: string | null
   phone_number: string | null
   image: string | null
+  profileCompleted: boolean
   createdAt: Date
   updatedAt: Date
   _count: UsersCountAggregateOutputType | null
@@ -228,6 +235,7 @@ export type usersWhereInput = {
   password?: Prisma.StringNullableFilter<"users"> | string | null
   phone_number?: Prisma.StringNullableFilter<"users"> | string | null
   image?: Prisma.StringNullableFilter<"users"> | string | null
+  profileCompleted?: Prisma.BoolFilter<"users"> | boolean
   createdAt?: Prisma.DateTimeFilter<"users"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"users"> | Date | string
   subscriptions?: Prisma.SubscriptionsListRelationFilter
@@ -248,6 +256,7 @@ export type usersOrderByWithRelationInput = {
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   phone_number?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
+  profileCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   subscriptions?: Prisma.subscriptionsOrderByRelationAggregateInput
@@ -271,6 +280,7 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   password?: Prisma.StringNullableFilter<"users"> | string | null
   phone_number?: Prisma.StringNullableFilter<"users"> | string | null
   image?: Prisma.StringNullableFilter<"users"> | string | null
+  profileCompleted?: Prisma.BoolFilter<"users"> | boolean
   createdAt?: Prisma.DateTimeFilter<"users"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"users"> | Date | string
   subscriptions?: Prisma.SubscriptionsListRelationFilter
@@ -291,6 +301,7 @@ export type usersOrderByWithAggregationInput = {
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   phone_number?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
+  profileCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.usersCountOrderByAggregateInput
@@ -311,6 +322,7 @@ export type usersScalarWhereWithAggregatesInput = {
   password?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
   phone_number?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
   image?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
+  profileCompleted?: Prisma.BoolWithAggregatesFilter<"users"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"users"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"users"> | Date | string
 }
@@ -325,6 +337,7 @@ export type usersCreateInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
@@ -345,6 +358,7 @@ export type usersUncheckedCreateInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
@@ -365,6 +379,7 @@ export type usersUpdateInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
@@ -385,6 +400,7 @@ export type usersUncheckedUpdateInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
@@ -405,6 +421,7 @@ export type usersCreateManyInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -419,6 +436,7 @@ export type usersUpdateManyMutationInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -433,6 +451,7 @@ export type usersUncheckedUpdateManyInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -452,6 +471,7 @@ export type usersCountOrderByAggregateInput = {
   password?: Prisma.SortOrder
   phone_number?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  profileCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -466,6 +486,7 @@ export type usersMaxOrderByAggregateInput = {
   password?: Prisma.SortOrder
   phone_number?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  profileCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -480,6 +501,7 @@ export type usersMinOrderByAggregateInput = {
   password?: Prisma.SortOrder
   phone_number?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  profileCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -582,6 +604,7 @@ export type usersCreateWithoutBanksInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
@@ -601,6 +624,7 @@ export type usersUncheckedCreateWithoutBanksInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
@@ -636,6 +660,7 @@ export type usersUpdateWithoutBanksInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
@@ -655,6 +680,7 @@ export type usersUncheckedUpdateWithoutBanksInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
@@ -674,6 +700,7 @@ export type usersCreateWithoutSchedulesInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
@@ -693,6 +720,7 @@ export type usersUncheckedCreateWithoutSchedulesInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
@@ -728,6 +756,7 @@ export type usersUpdateWithoutSchedulesInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
@@ -747,6 +776,7 @@ export type usersUncheckedUpdateWithoutSchedulesInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
@@ -766,6 +796,7 @@ export type usersCreateWithoutWorksInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
@@ -785,6 +816,7 @@ export type usersUncheckedCreateWithoutWorksInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
@@ -820,6 +852,7 @@ export type usersUpdateWithoutWorksInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
@@ -839,6 +872,7 @@ export type usersUncheckedUpdateWithoutWorksInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
@@ -858,6 +892,7 @@ export type usersCreateWithoutSessionsInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
@@ -877,6 +912,7 @@ export type usersUncheckedCreateWithoutSessionsInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
@@ -912,6 +948,7 @@ export type usersUpdateWithoutSessionsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
@@ -931,6 +968,7 @@ export type usersUncheckedUpdateWithoutSessionsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
@@ -950,6 +988,7 @@ export type usersCreateWithoutAccountsInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsCreateNestedManyWithoutUsersInput
@@ -969,6 +1008,7 @@ export type usersUncheckedCreateWithoutAccountsInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.subscriptionsUncheckedCreateNestedManyWithoutUsersInput
@@ -1004,6 +1044,7 @@ export type usersUpdateWithoutAccountsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUpdateManyWithoutUsersNestedInput
@@ -1023,6 +1064,7 @@ export type usersUncheckedUpdateWithoutAccountsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.subscriptionsUncheckedUpdateManyWithoutUsersNestedInput
@@ -1042,6 +1084,7 @@ export type usersCreateWithoutSubscriptionsInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   schedules?: Prisma.schedulesCreateNestedManyWithoutUsersInput
@@ -1061,6 +1104,7 @@ export type usersUncheckedCreateWithoutSubscriptionsInput = {
   password?: string | null
   phone_number?: string | null
   image?: string | null
+  profileCompleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   schedules?: Prisma.schedulesUncheckedCreateNestedManyWithoutUsersInput
@@ -1096,6 +1140,7 @@ export type usersUpdateWithoutSubscriptionsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schedules?: Prisma.schedulesUpdateManyWithoutUsersNestedInput
@@ -1115,6 +1160,7 @@ export type usersUncheckedUpdateWithoutSubscriptionsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone_number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schedules?: Prisma.schedulesUncheckedUpdateManyWithoutUsersNestedInput
@@ -1210,6 +1256,7 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   password?: boolean
   phone_number?: boolean
   image?: boolean
+  profileCompleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   subscriptions?: boolean | Prisma.users$subscriptionsArgs<ExtArgs>
@@ -1231,6 +1278,7 @@ export type usersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   password?: boolean
   phone_number?: boolean
   image?: boolean
+  profileCompleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["users"]>
@@ -1245,6 +1293,7 @@ export type usersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   password?: boolean
   phone_number?: boolean
   image?: boolean
+  profileCompleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["users"]>
@@ -1259,11 +1308,12 @@ export type usersSelectScalar = {
   password?: boolean
   phone_number?: boolean
   image?: boolean
+  profileCompleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "firstname" | "lastname" | "email" | "emailVerified" | "password" | "phone_number" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["users"]>
+export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "firstname" | "lastname" | "email" | "emailVerified" | "password" | "phone_number" | "image" | "profileCompleted" | "createdAt" | "updatedAt", ExtArgs["result"]["users"]>
 export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subscriptions?: boolean | Prisma.users$subscriptionsArgs<ExtArgs>
   schedules?: boolean | Prisma.users$schedulesArgs<ExtArgs>
@@ -1296,6 +1346,7 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     password: string | null
     phone_number: string | null
     image: string | null
+    profileCompleted: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["users"]>
@@ -1736,6 +1787,7 @@ export interface usersFieldRefs {
   readonly password: Prisma.FieldRef<"users", 'String'>
   readonly phone_number: Prisma.FieldRef<"users", 'String'>
   readonly image: Prisma.FieldRef<"users", 'String'>
+  readonly profileCompleted: Prisma.FieldRef<"users", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"users", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"users", 'DateTime'>
 }
