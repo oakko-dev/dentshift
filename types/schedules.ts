@@ -10,6 +10,7 @@ export interface ScheduleDataList {
 	df_percent: number
 	remark?: string
 	created_at: string
+	works_count: number
 }
 
 export interface ScheduleData {

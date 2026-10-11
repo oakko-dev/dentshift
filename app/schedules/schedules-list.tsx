@@ -206,22 +206,26 @@ export default function SchedulesList({ onEdit }: SchedulesListProps) {
 										)}
 									</div>
 									<div className="flex gap-2">
-										<Button
-											variant="ghost"
-											size="icon"
-											className="text-primary"
-											onClick={() => onEdit?.(schedule.id)}
-										>
-											<Icon icon="lucide:pencil" className="size-4" />
-										</Button>
-										<Button
-											variant="ghost"
-											size="icon"
-											className="text-destructive"
-											onClick={() => handleDelete(schedule.id, `${schedule.place_name} - ${schedule.place_branch}`, convertDateToThai(schedule.appointment_date, "d MMMM yyyy"))}
-										>
-											<Icon icon="lucide:trash-2" className="size-4" />
-										</Button>
+										{!isPastDate && (
+											<Button
+												variant="ghost"
+												size="icon"
+												className="text-primary"
+												onClick={() => onEdit?.(schedule.id)}
+											>
+												<Icon icon="lucide:pencil" className="size-4" />
+											</Button>
+										)}
+										{schedule.works_count === 0 && (
+											<Button
+												variant="ghost"
+												size="icon"
+												className="text-destructive"
+												onClick={() => handleDelete(schedule.id, `${schedule.place_name} - ${schedule.place_branch}`, convertDateToThai(schedule.appointment_date, "d MMMM yyyy"))}
+											>
+												<Icon icon="lucide:trash-2" className="size-4" />
+											</Button>
+										)}
 									</div>
 								</div>
 

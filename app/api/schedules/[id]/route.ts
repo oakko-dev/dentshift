@@ -142,6 +142,17 @@ export async function DELETE(
 				)
 			}
 
+			const worksCount = await db.works.count({
+				where: { schedule_id: scheduleId },
+			})
+
+			if (worksCount > 0) {
+				return NextResponse.json(
+					{ error: "ไม่สามารถลบนัดหมายที่มีรายการงานได้ กรุณาลบรายการงานก่อน" },
+					{ status: 409 },
+				)
+			}
+
 			await db.schedules.delete({
 				where: { id: scheduleId },
 			})
