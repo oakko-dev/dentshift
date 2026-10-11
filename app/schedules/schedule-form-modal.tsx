@@ -159,7 +159,7 @@ function ScheduleFormModalData({ scheduleId, scheduleData, placeData, onClose, o
 									)}
 									side="bottom"
 								>
-									<Calendar mode="single" selected={field.value!} onSelect={field.onChange} disabled={{ before: new Date() }} />
+									<Calendar mode="single" selected={field.value!} onSelect={field.onChange} />
 								</Popover>
 								<FormMessage />
 							</FormItem>
